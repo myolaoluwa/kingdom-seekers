@@ -220,7 +220,7 @@ alter table public.community_posts enable row level security;
 alter table public.reports enable row level security;
 alter table public.notifications enable row level security;
 
-create policy profile_read on public.profiles for select to authenticated using (id = (select auth.uid()) or public.is_staff() or public_profile);
+create policy profile_read on public.profiles for select to authenticated using (id = (select auth.uid()) or public.is_staff());
 create policy profile_edit on public.profiles for update to authenticated using (id = (select auth.uid())) with check (id = (select auth.uid()));
 create policy staff_read on public.staff_roles for select to authenticated using (user_id = (select auth.uid()) or public.has_role(array['admin']));
 create policy compass_all on public.compass_results for all to authenticated using (user_id = (select auth.uid())) with check (user_id = (select auth.uid()));

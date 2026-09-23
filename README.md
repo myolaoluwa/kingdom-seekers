@@ -4,7 +4,7 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 
 ## What V1 includes
 
-- Email registration and sign-in, progressive onboarding, profile editing, and profile visibility controls.
+- Email registration and sign-in, password recovery, progressive onboarding, and private profile editing.
 - Kingdom Compass reflection with a suggested service pathway and related missions.
 - Seven-day Revival Journey with progress and a private journal.
 - Prayer Exchange with anonymous, first-name, and private requests; moderation; one “I prayed” response per person; and prayer counts.

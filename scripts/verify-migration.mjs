@@ -29,6 +29,7 @@ try {
   if (!sequenceBlocked) throw new Error('Journey order was not enforced');
   const ownProfiles = await db.query('select count(*)::int as count from public.profiles');
   if (ownProfiles.rows[0].count !== 1) throw new Error('Private profiles leaked');
+  await db.exec(`update public.profiles set public_profile=true where id='00000000-0000-0000-0000-000000000001';`);
   let roleBlocked = false;
   try { await db.exec(`insert into public.staff_roles(user_id,role) values ('00000000-0000-0000-0000-000000000001','admin');`); }
   catch { roleBlocked = true; }
@@ -37,6 +38,8 @@ try {
   await db.exec(`insert into public.prayer_requests(user_id,body,visibility) values ('00000000-0000-0000-0000-000000000001','Please pray for a new opportunity.','anonymous');`);
   await db.exec(`reset role; insert into public.staff_roles(user_id,role) values ('00000000-0000-0000-0000-000000000001','admin'); update public.prayer_requests set status='approved' where visibility='anonymous';`);
   await db.exec(`reset role; set request.jwt.claim.sub = '00000000-0000-0000-0000-000000000002'; set role authenticated;`);
+  const visibleProfiles = await db.query('select count(*)::int as count from public.profiles');
+  if (visibleProfiles.rows[0].count !== 1) throw new Error('Profile details leaked to another member');
   const otherPrayers = await db.query('select count(*)::int as count from public.prayer_requests');
   if (otherPrayers.rows[0].count !== 1) throw new Error('Prayer visibility policy failed');
   const publicPrayerId = (await db.query('select id from public.prayer_requests')).rows[0].id;
