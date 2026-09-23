@@ -29,7 +29,20 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 
    Later role changes can be made in **Staff studio → Members** by an admin. Do not enable public inserts into `staff_roles`.
 
-The seeded events are examples and should be updated in Staff studio before inviting members. The database project and hosting account are external services; this repository does not contain their credentials or a live deployment.
+The seeded events are examples and should be updated in Staff studio before inviting members. The database project and hosting account are external services; this repository does not contain their credentials.
+
+## Vercel deployment
+
+This repository is linked to the Vercel project `delight12/kingdom-seekers`, with GitHub connected to `main`. The production alias is <https://kingdom-seekers-delight12.vercel.app>. The Vercel team's deployment protection currently requires a Vercel login to view it.
+
+The project does not yet have Supabase environment values on Vercel. After you have real project values, add both for production with the Vercel CLI:
+
+```bash
+vercel env add NEXT_PUBLIC_SUPABASE_URL production
+vercel env add NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY production
+```
+
+Enter each value at the CLI prompt. Add the same names for `preview` if you want pull request previews to use Supabase. Then trigger a new production deployment with `vercel --prod` or push a commit to `main`. Do not add placeholders or secret/service-role keys to Vercel's public variables.
 
 ## Checks
 
