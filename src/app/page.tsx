@@ -40,10 +40,14 @@ export default function App() {
   const [page, setPage] = useState<Page>('home');
   const [menu, setMenu] = useState(false);
   const [message, setMessage] = useState('');
+  const [dataError, setDataError] = useState('');
   const [busy, setBusy] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+  const [passwordRecovery, setPasswordRecovery] = useState(false);
 
   const load = useCallback(async (client: SupabaseClient, userId: string) => {
+    setLoading(true);
+    setDataError('');
     const [profile, roles, compass, progress, journal, days, prayers, prayed, missions, participation, events, registrations, posts, reports, notices] = await Promise.all([
       client.from('profiles').select('*').eq('id', userId).maybeSingle(),
       client.from('staff_roles').select('role').eq('user_id', userId),
@@ -62,7 +66,11 @@ export default function App() {
       client.from('notifications').select('*').order('created_at', { ascending: false }).limit(8),
     ]);
     const failures = [profile, roles, compass, progress, journal, days, prayers, prayed, missions, participation, events, registrations, posts, reports, notices].filter(r => r.error);
-    if (failures.length) setMessage(`Data could not load: ${failures[0].error?.message}. Check the database migration.`);
+    if (failures.length) {
+      setDataError(failures[0].error?.message || 'The database could not load.');
+      setLoading(false);
+      return;
+    }
     setData({
       profile: profile.data as Profile | null, roles: (roles.data ?? []).map(r => r.role), compass: compass.data as CompassResult | null,
       progress: (progress.data ?? []).map(r => r.day), journal: (journal.data ?? []) as Journal[], days: days.data?.length ? days.data as typeof journeyDays : journeyDays, prayers: (prayers.data ?? []) as Prayer[],
@@ -75,11 +83,19 @@ export default function App() {
 
   useEffect(() => {
     if (!db) return;
-    db.auth.getSession().then(({ data: result }) => { setSession(result.session); if (result.session) void load(db, result.session.user.id); else setLoading(false); });
-    const { data: subscription } = db.auth.onAuthStateChange((_event, next) => {
+    db.auth.getSession().then(async ({ data: result }) => {
+      setSession(result.session);
+      if (result.session) return void load(db, result.session.user.id);
+      const { error } = await db.from('journey_days').select('day').limit(1);
+      if (error) setDataError(error.message);
+      setLoading(false);
+    }).catch(error => { setDataError(error instanceof Error ? error.message : 'Could not restore your session.'); setLoading(false); });
+    const { data: subscription } = db.auth.onAuthStateChange((event, next) => {
+      if (event === 'INITIAL_SESSION') return;
+      if (event === 'PASSWORD_RECOVERY') setPasswordRecovery(true);
       setSession(next);
-      if (next) void load(db, next.user.id);
-      else { setData(empty); setLoading(false); }
+      if (next) { setLoading(true); setTimeout(() => void load(db, next.user.id), 0); }
+      else { setData(empty); setDataError(''); setLoading(false); }
     });
     return () => subscription.subscription.unsubscribe();
   }, [db, load]);
@@ -98,7 +114,9 @@ export default function App() {
   function open(next: Page) { setPage(next); setMenu(false); setMessage(''); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
   if (!db) return <div className="setup-screen"><Image src="/logo.png" alt="Kingdom Seekers" width={180} height={180} /><h1>Set up The Seekers’ Hub</h1><p>Add your Supabase project URL and publishable key to <code>.env.local</code>, then apply the V1 migration. See the README for steps.</p></div>;
+  if (passwordRecovery) return <PasswordRecovery client={db} done={() => setPasswordRecovery(false)} />;
   if (loading) return <div className="loading-screen"><span className="loader" /><p>Preparing your journey…</p></div>;
+  if (dataError) return <div className="setup-screen" role="alert"><Image src="/logo.png" alt="Kingdom Seekers" width={180} height={180} /><h1>We couldn’t load your journey</h1><p>{dataError}</p><p>Please try again shortly. If the problem continues, contact the Kingdom Seekers team.</p><button className="button" onClick={() => { if (session) void load(db, session.user.id); else window.location.reload(); }}>Try again</button><button className="text-button" onClick={() => void db.auth.signOut()}>Sign out</button></div>;
   if (!session) return <Auth client={db} mode={authMode} setMode={setAuthMode} />;
   if (!data.profile?.onboarding_complete) return <Onboarding client={db} userId={session.user.id} profile={data.profile} refresh={() => load(db, session.user.id)} />;
 
@@ -152,8 +170,30 @@ function Submit({ children, busy, className = '' }: { children: React.ReactNode;
 
 function Auth({ client, mode, setMode }: { client: SupabaseClient; mode: 'login' | 'signup'; setMode: (mode: 'login' | 'signup') => void }) {
   const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [name, setName] = useState(''); const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
+  const [forgot, setForgot] = useState(false);
+  async function requestReset(event: React.FormEvent) {
+    event.preventDefault(); setBusy(true); setError('');
+    const { error: resetError } = await client.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+    setBusy(false);
+    setError(resetError ? resetError.message : 'Check your email for a password reset link.');
+  }
   async function submit(event: React.FormEvent) { event.preventDefault(); setBusy(true); setError(''); const result = mode === 'signup' ? await client.auth.signUp({ email, password, options: { data: { full_name: name.trim() } } }) : await client.auth.signInWithPassword({ email, password }); setBusy(false); if (result.error) setError(result.error.message); else if (mode === 'signup' && !result.data.session) setError('Account created. Check your email to confirm your address, then sign in.'); }
-  return <div className="auth-screen"><div className="auth-story"><Image src="/logo.png" alt="Kingdom Seekers" width={160} height={100} /><div><span className="eyebrow">THE SEEKERS’ HUB</span><h1>Every journey begins with a step.</h1><p>Discover your path. Grow in faith. Pray for others. Serve with purpose.</p><div className="auth-cycle">DISCOVER <span>→</span> GROW <span>→</span> PRAY <span>→</span> SERVE</div></div></div><div className="auth-form-wrap"><div className="auth-form"><span className="eyebrow">WELCOME {mode === 'signup' ? 'TO THE JOURNEY' : 'BACK'}</span><h2>{mode === 'signup' ? 'Find your place here.' : 'Continue your journey.'}</h2><p>{mode === 'signup' ? 'Create an account to take your first step.' : 'Sign in to pick up where you left off.'}</p><form onSubmit={submit}>{mode === 'signup' && <label>Your name<input required minLength={2} value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" /></label>}<label>Email address<input required type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" /></label><label>Password<input required minLength={8} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="At least 8 characters" /></label>{error && <div className="form-message" role="status">{error}</div>}<Submit busy={busy}>{mode === 'signup' ? 'Create account' : 'Sign in'}</Submit></form><p className="auth-switch">{mode === 'signup' ? 'Already have an account?' : 'New to The Seekers’ Hub?'} <button onClick={() => { setError(''); setMode(mode === 'signup' ? 'login' : 'signup'); }}>{mode === 'signup' ? 'Sign in' : 'Create an account'}</button></p></div></div></div>;
+  if (forgot) return <div className="onboard-screen"><div className="onboard-card"><Image src="/logo.png" alt="Kingdom Seekers" width={100} height={80} /><span className="eyebrow">ACCOUNT RECOVERY</span><h1>Reset your password</h1><p>We’ll email a secure reset link if this address has an account.</p><form onSubmit={requestReset}><label>Email address<input required type="email" value={email} onChange={event => setEmail(event.target.value)} /></label>{error && <div className="form-message" role="status">{error}</div>}<Submit busy={busy}>Send reset link</Submit></form><button className="text-button" onClick={() => { setForgot(false); setError(''); }}>Back to sign in</button></div></div>;
+  return <div className="auth-screen"><div className="auth-story"><Image src="/logo.png" alt="Kingdom Seekers" width={160} height={100} /><div><span className="eyebrow">THE SEEKERS’ HUB</span><h1>Every journey begins with a step.</h1><p>Discover your path. Grow in faith. Pray for others. Serve with purpose.</p><div className="auth-cycle">DISCOVER <span>→</span> GROW <span>→</span> PRAY <span>→</span> SERVE</div></div></div><div className="auth-form-wrap"><div className="auth-form"><span className="eyebrow">WELCOME {mode === 'signup' ? 'TO THE JOURNEY' : 'BACK'}</span><h2>{mode === 'signup' ? 'Find your place here.' : 'Continue your journey.'}</h2><p>{mode === 'signup' ? 'Create an account to take your first step.' : 'Sign in to pick up where you left off.'}</p><form onSubmit={submit}>{mode === 'signup' && <label>Your name<input required minLength={2} value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" /></label>}<label>Email address<input required type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" /></label><label>Password<input required minLength={8} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="At least 8 characters" /></label>{error && <div className="form-message" role="status">{error}</div>}<Submit busy={busy}>{mode === 'signup' ? 'Create account' : 'Sign in'}</Submit></form>{mode === 'login' && <button className="text-button" onClick={() => { setForgot(true); setError(''); }}>Forgot password?</button>}<p className="auth-switch">{mode === 'signup' ? 'Already have an account?' : 'New to The Seekers’ Hub?'} <button onClick={() => { setError(''); setMode(mode === 'signup' ? 'login' : 'signup'); }}>{mode === 'signup' ? 'Sign in' : 'Create an account'}</button></p></div></div></div>;
+}
+
+function PasswordRecovery({ client, done }: { client: SupabaseClient; done: () => void }) {
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  async function submit(event: React.FormEvent) {
+    event.preventDefault(); setBusy(true); setError('');
+    const result = await client.auth.updateUser({ password });
+    setBusy(false);
+    if (result.error) setError(result.error.message);
+    else done();
+  }
+  return <div className="onboard-screen"><div className="onboard-card"><Image src="/logo.png" alt="Kingdom Seekers" width={100} height={80} /><span className="eyebrow">ACCOUNT RECOVERY</span><h1>Choose a new password</h1><form onSubmit={submit}><label>New password<input required minLength={8} type="password" autoComplete="new-password" value={password} onChange={event => setPassword(event.target.value)} /></label>{error && <div className="form-message" role="status">{error}</div>}<Submit busy={busy}>Save password</Submit></form></div></div>;
 }
 
 function Onboarding({ client, userId, profile, refresh }: { client: SupabaseClient; userId: string; profile: Profile | null; refresh: () => Promise<void> }) {

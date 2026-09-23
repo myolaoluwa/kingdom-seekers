@@ -47,6 +47,25 @@ try {
   await db.exec(`reset role; set request.jwt.claim.sub = '00000000-0000-0000-0000-000000000003'; set role authenticated;`);
   const otherPosts = await db.query('select count(*)::int as count from public.community_posts');
   if (otherPosts.rows[0].count !== 0) throw new Error('Unapproved post leaked');
+  await db.exec(`insert into public.mission_participation(mission_id,user_id)
+    select id, '00000000-0000-0000-0000-000000000003' from public.missions limit 1;`);
+  const myMission = await db.query('select mission_id from public.mission_participation');
+  if (myMission.rows.length !== 1) throw new Error('Member could not join a mission');
+  await db.query(`update public.mission_participation set status='completed', completed_at=now()
+    where mission_id=$1`, [myMission.rows[0].mission_id]);
+  const completed = await db.query('select status from public.mission_participation');
+  if (completed.rows[0].status !== 'completed') throw new Error('Mission completion failed');
+
+  await db.exec(`reset role; insert into public.events(title,description,starts_at,venue,location,capacity)
+    values ('Capacity test','A small gathering',now() + interval '1 day','Hall','Lagos',1);`);
+  const eventId = (await db.query("select id from public.events where title='Capacity test'")).rows[0].id;
+  await db.exec(`set request.jwt.claim.sub = '00000000-0000-0000-0000-000000000002'; set role authenticated;`);
+  await db.query('insert into public.event_registrations(event_id,user_id) values ($1,$2)', [eventId, '00000000-0000-0000-0000-000000000002']);
+  await db.exec(`reset role; set request.jwt.claim.sub = '00000000-0000-0000-0000-000000000003'; set role authenticated;`);
+  let capacityBlocked = false;
+  try { await db.query('insert into public.event_registrations(event_id,user_id) values ($1,$2)', [eventId, '00000000-0000-0000-0000-000000000003']); }
+  catch { capacityBlocked = true; }
+  if (!capacityBlocked) throw new Error('Event capacity was not enforced');
   console.log('Migration and core privacy checks passed.');
 } catch (error) {
   console.error(error.message);

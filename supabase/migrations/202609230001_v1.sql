@@ -303,8 +303,4 @@ insert into public.journey_days(day,title,scripture,prompt,action) values
 (6,'Faith in action','James 2:14–17','How can care become a concrete action?','Do one act of kindness.'),
 (7,'Reflect and continue','Psalm 77:11–12','What changed in you this week?','Reflect on your journey and choose your next step.');
 
-insert into public.events(title,description,starts_at,venue,location,capacity) values
-('Kingdom Seekers Prayer Gathering','An evening of prayer, worship and encouragement together.','2026-11-14 17:00:00+01','Community Hall','Lagos, Nigeria',150),
-('Community Outreach Day','Serve our neighbours through practical care and conversation.','2026-11-28 09:00:00+01','Meeting point shared after registration','Ogun, Nigeria',100);
-
 insert into public.notifications(title,body) values ('Welcome to The Seekers’ Hub','Your journey begins with one meaningful step. Explore today’s Journey, pray for someone, or discover a mission.');
