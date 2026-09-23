@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
-    "test:db": "node scripts/verify-migration.mjs"
+    "test:db": "node scripts/verify-migration.mjs",
+    "auth:check": "node scripts/configure-auth.mjs --check",
+    "auth:configure": "node scripts/configure-auth.mjs"
   },
   "dependencies": {
     "@supabase/server": "^1.8.0",

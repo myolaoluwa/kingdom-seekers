@@ -32,6 +32,17 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 
 No events are published by default. Staff should create confirmed gatherings in Staff studio before inviting members. The database project and hosting account are external services; this repository does not contain their credentials.
 
+## Supabase Auth email through Brevo
+
+Supabase Auth owns signup, email confirmation, sign-in, and password recovery. Brevo only delivers the transactional emails through Supabase's custom SMTP settings. Brevo credentials are not used by the Next.js app and must not be added to Vercel or a `NEXT_PUBLIC_` variable.
+
+1. Copy [`.env.auth.example`](.env.auth.example) to `.env.auth.local`. The project reference, site URL, redirect list, Brevo SMTP host (`smtp-relay.brevo.com`), port (`587`), and sender name are prefilled. `.env.auth.local` is ignored by Git.
+2. Fill `SUPABASE_ACCESS_TOKEN` with a Supabase Management API token that can edit this project's Auth configuration. In Brevo **Settings → SMTP & API**, fill `BREVO_SMTP_LOGIN` with the SMTP login and `BREVO_SMTP_KEY` with an **SMTP key**, not an API key. Fill `BREVO_FROM_EMAIL` with a sender address verified in Brevo. Keep the token and SMTP key private.
+3. Run `npm run auth:check` to validate the local fields, then `npm run auth:configure` to apply them to this Supabase project. The script enables email/password Auth with email confirmation, secure email changes, the production Site URL and allowed local redirect, and Brevo custom SMTP. It does not print credential values.
+4. In Brevo, authenticate the sending domain with its recommended DNS records, and check transactional email logs. Test signup confirmation and password recovery using an address you control. Supabase's default mail service is restricted and is not intended for production.
+
+You can also enter the same values manually in Supabase **Authentication → SMTP Settings** and **Authentication → URL Configuration** instead of using the script. The application already points to the supplied Supabase project; no Brevo API package is needed. [Supabase custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp), [Supabase redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls), and [Brevo SMTP settings](https://help.brevo.com/hc/en-us/articles/7924908994450-Send-transactional-emails-using-Brevo-SMTP) describe the provider-side settings.
+
 ## Vercel deployment
 
 This repository is linked to the Vercel project `delight12/kingdom-seekers`, with GitHub connected to `main`. The production alias is <https://kingdom-seekers-delight12.vercel.app>. The Vercel team's deployment protection currently requires a Vercel login to view it.
