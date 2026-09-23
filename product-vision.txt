@@ -1,0 +1,2212 @@
+# THE SEEKERS’ HUB
+
+## Product Vision Plan
+
+### Product Philosophy
+
+**Discover → Grow → Pray → Serve → Impact**
+
+### Brand Promise
+
+> “Here is your journey. Here is your purpose. Here is someone to pray for. Here is your mission. And here is the impact we're making together.”
+
+The Seekers’ Hub is envisioned as more than a church application or event-management platform. It is a connected spiritual-growth, purpose-discovery, prayer, community, service, and impact ecosystem for Kingdom Seekers.
+
+---
+
+# 1. PRODUCT CONCEPT
+
+**The Seekers’ Hub** is a mobile-first Christian growth and community platform designed to help people intentionally develop their spiritual lives, discover areas in which they may serve, pray for others, participate in real-world missions, receive support, connect with the Kingdom Seekers community, and see the collective impact of the movement.
+
+The application brings several experiences into one connected journey:
+
+**Discover**
+through Kingdom Compass.
+
+↓
+
+**Grow**
+through Revival Journey.
+
+↓
+
+**Pray**
+through Prayer Exchange.
+
+↓
+
+**Serve**
+through Kingdom Missions.
+
+↓
+
+**Impact**
+through real-world activities recorded on the Kingdom Impact Map.
+
+Rather than building disconnected features, every major part of the product should move the user forward within this journey. This interconnected principle is explicitly central to the original vision.
+
+---
+
+# 2. THE PROBLEM
+
+Christian communities often have several disconnected systems for:
+
+* spiritual-development programs;
+* prayer requests;
+* counselling;
+* events;
+* outreach;
+* discipleship;
+* ministry opportunities;
+* testimonies;
+* community communication;
+* media;
+* volunteer participation;
+* member engagement.
+
+A member may attend an event but have no structured continuation afterward.
+
+Someone may want to grow spiritually but may not know what to do each day.
+
+Someone may want to serve but may not know where their strengths fit.
+
+Someone may need prayer but may not know whom to approach.
+
+Someone may pray for others but never see how their prayer life connects with a larger community.
+
+Someone may participate in outreach but have no visible history of the collective work being accomplished.
+
+Leaders may also struggle to understand whether members are progressing from:
+
+**attendance → growth → service → impact.**
+
+The Seekers’ Hub solves this by creating one continuous spiritual-growth and engagement ecosystem.
+
+---
+
+# 3. PRODUCT VISION
+
+## Long-Term Vision
+
+Build a digital spiritual-growth ecosystem where every Kingdom Seeker can:
+
+**Know where they are.
+Know how they can grow.
+Know who they can pray for.
+Know where they can serve.
+Know where they belong.
+And see the impact they are helping create.**
+
+The long-term product should be capable of supporting thousands and eventually millions of users, beginning with Kingdom Seekers activities in Nigeria and potentially expanding into a wider global community.
+
+---
+
+# 4. PRODUCT MISSION
+
+The mission of The Seekers’ Hub is to help transform Christian engagement from passive content consumption into an active lifestyle of:
+
+* spiritual growth;
+* prayer;
+* service;
+* community;
+* purpose discovery;
+* discipleship;
+* outreach;
+* encouragement;
+* real-world Kingdom impact.
+
+The application should repeatedly move users from **knowing** to **doing**.
+
+---
+
+# 5. CORE EXPERIENCE
+
+The central user journey should be:
+
+## DISCOVER → GROW → PRAY → SERVE → IMPACT → REFLECT → CONTINUE
+
+### 1. Discover
+
+The user learns more about their interests, strengths, gifts and areas in which they may enjoy serving through **Kingdom Compass**.
+
+### 2. Grow
+
+The app gives them a structured spiritual-growth journey through **Revival Journey**.
+
+### 3. Pray
+
+The user develops a lifestyle of praying for others through **Prayer Exchange**.
+
+### 4. Serve
+
+The app recommends practical actions through **Kingdom Missions**.
+
+### 5. Impact
+
+Users participate in real activities, events, outreach and service opportunities.
+
+### 6. Reflect
+
+The user records journal entries, mission reflections, testimonies and milestones.
+
+### 7. Continue
+
+Their dashboard adapts and gives them the next meaningful action.
+
+This creates a repeating growth cycle rather than a collection of static features.
+
+---
+
+# 6. TARGET USERS
+
+The product should support several user types.
+
+## A. New Seeker
+
+Someone newly connected with Kingdom Seekers.
+
+Their primary needs are:
+
+* understanding the community;
+* finding events;
+* starting a spiritual journey;
+* receiving simple daily guidance;
+* learning where they may fit.
+
+---
+
+## B. Growing Member
+
+Someone actively trying to build spiritual consistency.
+
+Primary needs:
+
+* prayer;
+* Bible reading;
+* challenges;
+* journaling;
+* reminders;
+* accountability;
+* progress tracking.
+
+---
+
+## C. Active Volunteer
+
+Someone ready to serve.
+
+Primary needs:
+
+* mission opportunities;
+* upcoming outreaches;
+* events;
+* volunteer opportunities;
+* teams;
+* areas aligned with their strengths.
+
+---
+
+## D. Community Member
+
+Someone using the application for connection.
+
+Primary needs:
+
+* community discussions;
+* testimonies;
+* encouragement;
+* prayer;
+* groups;
+* media.
+
+---
+
+## E. Person Seeking Support
+
+Someone who may need:
+
+* prayer;
+* counselling;
+* pastoral guidance;
+* follow-up;
+* private communication.
+
+Their experience requires considerably stronger privacy controls than ordinary community interaction.
+
+---
+
+## F. Ministry Leader / Counsellor
+
+Responsible for:
+
+* assigned counselling requests;
+* follow-up;
+* ministry groups;
+* specific members where appropriate.
+
+Access should be role-based.
+
+---
+
+## G. Administrator
+
+Responsible for managing the platform.
+
+Administration should itself have multiple permission levels rather than giving every administrator access to everything.
+
+---
+
+# 7. THE PRODUCT ECOSYSTEM
+
+The product can be organized into **nine major systems**.
+
+### Growth System
+
+Revival Journey
+
+### Purpose System
+
+Kingdom Compass
+
+### Prayer System
+
+Prayer Exchange
+
+### Action System
+
+Kingdom Missions
+
+### Impact System
+
+Kingdom Impact Map
+
+### Community System
+
+Community + Testimonies
+
+### Gathering System
+
+Events
+
+### Content System
+
+Media Hub
+
+### Care System
+
+Shepherd’s Care
+
+Everything else—profiles, notifications, administration, analytics and personalization—supports these systems.
+
+---
+
+# 8. HOME / TODAY DASHBOARD
+
+The Home screen should function as the user's **spiritual command centre**.
+
+It should not simply display links to features.
+
+It should answer:
+
+**What should I focus on today?**
+
+Example:
+
+## Good morning, Jude
+
+### Your Journey
+
+Day 12 of your current journey.
+
+**Today's Scripture**
+
+**Today's Prayer Focus**
+
+**Today's Mission**
+Encourage someone today.
+
+**Prayer Exchange**
+3 people are waiting for prayer.
+
+**Your Compass**
+Leadership • Outreach • Communication
+
+**Upcoming**
+Kingdom Seekers Intercedes 2026
+
+**Community Impact**
+See what Kingdom Seekers accomplished this month.
+
+The original vision calls for personalized content including journey progress, scripture, prayer prompts, missions, events, announcements, testimonies and impact statistics.
+
+---
+
+# 9. PERSONALIZED “NEXT BEST ACTION”
+
+The application should gradually become intelligent enough to answer:
+
+**“What is the most useful thing this person could do next?”**
+
+Possible recommendations:
+
+* Continue your journey.
+* Complete today's Scripture reading.
+* Pray for someone.
+* Finish yesterday's mission.
+* Register for an upcoming outreach.
+* Retake your Kingdom Compass.
+* Journal about today's lesson.
+* Join an outreach team.
+* Submit an answered prayer testimony.
+* Continue an unfinished devotional.
+
+The user should not need to manually navigate every feature to discover what matters.
+
+---
+
+# 10. MODULE 1 — REVIVAL JOURNEY
+
+## Purpose
+
+Revival Journey is the user's personal spiritual-development system.
+
+It provides structure and progression without making faith feel like a competitive game.
+
+The proposed spiritual progression is:
+
+**Encounter → Consecration → Growth → Service → Influence**
+
+## Core Activities
+
+Users may receive activities such as:
+
+* Scripture reading;
+* prayer;
+* worship;
+* journaling;
+* forgiveness;
+* encouragement;
+* testimony sharing;
+* praying for someone;
+* serving someone;
+* inviting someone to a Kingdom Seekers event.
+
+## Journey Types
+
+### Daily Journey
+
+Small actions for today.
+
+### Weekly Journey
+
+A larger focus for the week.
+
+### Structured Challenge
+
+Examples:
+
+**7 Days of Prayer**
+
+**21 Days of Revival**
+
+**30 Days of Scripture**
+
+### Event Journey
+
+Preparation before and continuation after a major Kingdom Seekers event.
+
+---
+
+# 11. JOURNEY PROGRESS
+
+Users should be able to see:
+
+* current stage;
+* completed activities;
+* daily progress;
+* weekly progress;
+* current streak;
+* milestones;
+* completed journeys;
+* personal reflections.
+
+Progress should celebrate consistency rather than compare one person's spirituality against another's.
+
+---
+
+# 12. PRIVATE SPIRITUAL JOURNAL
+
+The Journey module should contain a private journal.
+
+Possible entry types:
+
+* Prayer
+* Scripture Reflection
+* Gratitude
+* Lesson Learned
+* Mission Reflection
+* Personal Note
+* Testimony Draft
+
+Example:
+
+**What stood out to you today?**
+
+[Write reflection]
+
+Users should be able to revisit previous entries as their personal spiritual history.
+
+---
+
+# 13. MODULE 2 — KINGDOM COMPASS
+
+## Purpose
+
+Kingdom Compass is the app's guided self-discovery system.
+
+It helps users reflect on areas such as:
+
+* gifts;
+* strengths;
+* interests;
+* passions;
+* leadership;
+* service;
+* communication;
+* creativity;
+* compassion;
+* evangelism;
+* teaching;
+* administration;
+* outreach;
+* prayer.
+
+---
+
+# 14. COMPASS EXPERIENCE
+
+The user completes a guided questionnaire.
+
+The system then generates a **Kingdom Compass Profile**.
+
+Example:
+
+## Your Kingdom Compass
+
+**Gift**
+Leadership
+
+**Strength**
+Communication
+
+**Passion**
+People
+
+**Burden**
+Outreach
+
+### Potential Pathways
+
+* Outreach
+* Leadership
+* Media
+* Evangelism
+* Prayer
+* Teaching
+* Community Service
+
+These should be presented as **reflective guidance**, not as definitive declarations about a person's spiritual calling.
+
+---
+
+# 15. COMPASS → ACTION ENGINE
+
+The real value of Compass comes after the result.
+
+Instead of merely displaying:
+
+**“You may be good at outreach.”**
+
+the application should use the result to recommend things.
+
+For example:
+
+### Because Outreach is one of your interests:
+
+**Mission**
+Join Saturday's community outreach.
+
+**Team**
+Outreach Team
+
+**Growth Challenge**
+7-Day Evangelism Challenge
+
+**Event**
+Community Outreach – Saturday
+
+**Media**
+How to Share Your Faith Naturally
+
+This transforms Kingdom Compass from a quiz into a personalization engine.
+
+---
+
+# 16. MODULE 3 — PRAYER EXCHANGE
+
+## Purpose
+
+Prayer Exchange becomes the prayer engine of the community.
+
+A person can submit:
+
+> “Please pray for my family.”
+
+Another person may receive:
+
+> “Someone needs you to pray today.”
+
+and then tap:
+
+**I PRAYED**
+
+The original vision specifically proposes anonymous or first-name-only requests, an “I Prayed” interaction, prayer counts and prayer streaks.
+
+---
+
+# 17. PRAYER REQUEST PRIVACY LEVELS
+
+When submitting a request:
+
+### Anonymous
+
+No identity shown.
+
+### First Name
+
+Only first name shown.
+
+### Private
+
+Only authorized prayer/support teams may access it.
+
+Sensitive information should never automatically become publicly visible.
+
+---
+
+# 18. PRAYER LIFECYCLE
+
+Every prayer request can follow a lifecycle:
+
+**Request submitted**
+
+↓
+
+**Moderation/safety check where required**
+
+↓
+
+**Prayer request distributed**
+
+↓
+
+**Community members pray**
+
+↓
+
+**Prayer count grows**
+
+↓
+
+**Requester posts update**
+
+↓
+
+**Prayer answered**
+
+↓
+
+**Optional testimony**
+
+This creates closure rather than allowing prayer requests to disappear into a feed.
+
+---
+
+# 19. PRAYER CIRCLES
+
+Users should eventually be able to create smaller prayer circles.
+
+Examples:
+
+* Friends
+* Family
+* Campus
+* City
+* Ministry Team
+* Event Prayer Team
+
+Users could share requests within the circle rather than the whole community.
+
+---
+
+# 20. MODULE 4 — KINGDOM MISSIONS
+
+## Purpose
+
+Kingdom Missions converts faith into action.
+
+The mission engine should encourage people to take small and large practical actions instead of simply consuming content.
+
+Mission categories from the source vision include prayer, evangelism, kindness, service, outreach, encouragement, giving, community, personal growth and Kingdom Seekers events.
+
+---
+
+# 21. MISSION TYPES
+
+### Daily Missions
+
+Small actions achievable today.
+
+### Weekly Missions
+
+Activities requiring more commitment.
+
+### Personal Missions
+
+Relevant to an individual's growth.
+
+### Group Missions
+
+Completed together with others.
+
+### Event Missions
+
+Connected with events.
+
+### Outreach Missions
+
+Real-world service.
+
+### KSI Missions
+
+Special Kingdom Seekers initiatives.
+
+---
+
+# 22. MISSION FLOW
+
+**Discover Mission**
+
+↓
+
+**Accept**
+
+↓
+
+**Take Action**
+
+↓
+
+**Mark Complete**
+
+↓
+
+**Write Optional Reflection**
+
+↓
+
+**Optional Photo**
+
+↓
+
+**Impact Recorded**
+
+↓
+
+**Recommended Next Mission**
+
+---
+
+# 23. MISSION EXAMPLES
+
+### Mission
+
+Encourage someone who is struggling.
+
+### Mission
+
+Pray with someone today.
+
+### Mission
+
+Help someone without expecting anything in return.
+
+### Mission
+
+Invite someone to a Kingdom Seekers program.
+
+### Mission
+
+Share your testimony.
+
+---
+
+# 24. KINGDOM IMPACT SCORE
+
+An optional **Kingdom Impact Score** can visualize participation.
+
+However, it should never imply:
+
+* who is more spiritual;
+* who is a better Christian;
+* who is more important;
+* spiritual ranking.
+
+It should simply summarize engagement.
+
+Possible sources:
+
+* missions completed;
+* outreach participation;
+* events volunteered;
+* prayers offered;
+* community service.
+
+A better UI term may eventually be:
+
+**Your Impact**
+
+rather than emphasizing a public numerical score.
+
+---
+
+# 25. MODULE 5 — KINGDOM IMPACT MAP
+
+## Purpose
+
+The Impact Map transforms activities into a visible history of Kingdom Seekers' work.
+
+The original concept proposes showing outreach programs, prayer gatherings, medical outreaches, evangelism, KSI events, community projects, volunteer activities and testimonies.
+
+---
+
+# 26. MAP EXPERIENCE
+
+Start with Nigeria.
+
+Example:
+
+### Ogun State
+
+**Kingdom Seekers Outreach**
+
+327 People Reached
+
+84 Volunteers
+
+42 Prayer Requests
+
+19 Testimonies
+
+[View Story]
+
+[View Photos]
+
+[Upcoming Activities]
+
+Eventually the map can expand internationally.
+
+---
+
+# 27. IMPACT MAP AS ORGANIZATIONAL MEMORY
+
+The map should not only show what is happening today.
+
+It should become the historical record of Kingdom Seekers.
+
+Users might eventually view:
+
+**2026 Impact**
+
+**2027 Impact**
+
+**All-Time Impact**
+
+or explore:
+
+* cities;
+* states;
+* countries;
+* event types;
+* years;
+* outreach categories.
+
+This creates a visual legacy of the movement.
+
+---
+
+# 28. MODULE 6 — EVENTS
+
+## Purpose
+
+Events connect the digital experience with physical gatherings.
+
+Admins can manage:
+
+* name;
+* description;
+* date;
+* time;
+* venue;
+* location;
+* guest ministers;
+* images;
+* registration;
+* deadlines;
+* event capacity.
+
+---
+
+# 29. EVENT EXPERIENCE
+
+Each event can contain:
+
+**About**
+
+**Speakers/Ministers**
+
+**Schedule**
+
+**Venue**
+
+**Countdown**
+
+**Registration**
+
+**Share**
+
+**Prepare**
+
+**Event Media**
+
+**Post-Event Journey**
+
+This last part is especially important.
+
+Events should not become isolated announcements.
+
+For example:
+
+### Before the event
+
+7-Day Prayer Preparation
+
+### During
+
+Check-in
+
+### After
+
+7-Day Revival Journey
+
+This ties Events back into the core experience.
+
+---
+
+# 30. EVENT REGISTRATION
+
+Users can register inside the application.
+
+For external participants:
+
+**Public Registration Link**
+
+and
+
+**QR Code**
+
+can allow registration without installing the app.
+
+The original requirements include individual/group registration and group-size capture.
+
+---
+
+# 31. MODULE 7 — MEDIA HUB
+
+The Media Hub stores Kingdom Seekers content.
+
+Categories may include:
+
+* Sermons
+* Worship
+* Prayer Sessions
+* Videos
+* Photos
+* Testimonies
+* Devotionals
+* Teaching Resources
+
+Content can also be organized by:
+
+**Event**
+
+**Topic**
+
+**Series**
+
+**Speaker**
+
+**Year**
+
+**Journey**
+
+The underlying source vision calls for administrators to upload and categorize this material.
+
+---
+
+# 32. MEDIA SHOULD CONNECT TO GROWTH
+
+Instead of becoming a passive video library:
+
+After watching a sermon, the application might suggest:
+
+**Reflect**
+
+**Journal**
+
+**Start Related Journey**
+
+**Complete Related Mission**
+
+**Share with Your Prayer Circle**
+
+This keeps the product focused on transformation rather than consumption.
+
+---
+
+# 33. MODULE 8 — TESTIMONIES
+
+Users can share testimonies containing:
+
+* title;
+* description;
+* optional image/video;
+* first-name or anonymous display.
+
+Public testimonies should pass administrator approval before publication.
+
+Possible categories:
+
+* Answered Prayer
+* Healing
+* Provision
+* Salvation
+* Growth
+* Outreach
+* Relationship
+* Career
+* Family
+* Other
+
+Community interaction should emphasize encouragement rather than popularity.
+
+---
+
+# 34. MODULE 9 — COMMUNITY
+
+The Community should function like a safe ministry forum rather than an unrestricted social network.
+
+Users can:
+
+* share encouragement;
+* participate in discussions;
+* comment;
+* react;
+* share approved testimonies;
+* participate in group challenges;
+* join ministry-related groups.
+
+Moderation and reporting are mandatory parts of this feature.
+
+---
+
+# 35. COMMUNITY GROUPS
+
+Possible community spaces include:
+
+### Ministry Groups
+
+Media
+Prayer
+Evangelism
+Outreach
+Worship
+
+### Location Groups
+
+Lagos
+Ogun
+Ibadan
+Abuja
+
+### Growth Groups
+
+New Believers
+Leadership
+Prayer
+Bible Study
+
+### Event Groups
+
+Temporary spaces around major Kingdom Seekers programs.
+
+---
+
+# 36. MODULE 10 — SHEPHERD’S CARE
+
+## Purpose
+
+Shepherd’s Care is the private care and counselling area of The Seekers’ Hub.
+
+It should feel different from the public Community section.
+
+Users may:
+
+* request counselling;
+* request prayer/support;
+* speak with an assigned counsellor;
+* receive follow-up;
+* access emergency-help guidance.
+
+---
+
+# 37. SHEPHERD’S CARE FLOW
+
+**Request Help**
+
+↓
+
+**Select Support Area**
+
+Possible categories:
+
+* Spiritual Growth
+* Family / Relationships
+* Personal Struggles
+* Faith Questions
+* Life Decisions
+* Other
+
+↓
+
+**Describe Situation**
+
+↓
+
+**Choose Whether Contact Is Requested**
+
+↓
+
+**Submit Securely**
+
+↓
+
+**Appropriate Counsellor Assigned**
+
+↓
+
+**Counsellor Responds**
+
+↓
+
+**Follow-Up**
+
+↓
+
+**Case Resolved / Closed**
+
+---
+
+# 38. COUNSELLING PRIVACY
+
+Shepherd’s Care should have one of the strongest permission systems in the application.
+
+A general administrator should not automatically be able to read counselling cases.
+
+Possible roles:
+
+**Counselling Supervisor**
+
+**Counsellor**
+
+**Pastoral Leader**
+
+Each person should only access cases appropriate to their role.
+
+Audit logs should record important administrative access.
+
+---
+
+# 39. EMERGENCY SUPPORT
+
+Shepherd’s Care should clearly explain that the app is not an emergency response service.
+
+Where a user indicates immediate danger or urgent risk, the application should direct them toward appropriate emergency, professional, pastoral or local support rather than treating ordinary in-app counselling as sufficient.
+
+This principle is already reflected in the source's proposed Emergency Help section.
+
+---
+
+# 40. USER PROFILE
+
+A personal profile can contain:
+
+* Profile Photo
+* Name
+* Bio
+* Location
+* Kingdom Compass
+* Journey Progress
+* Prayer Streak
+* Completed Missions
+* Milestones
+* Saved Content
+* Prayer Requests
+* Testimonies
+
+The original product also requires users to control which information is public or private.
+
+---
+
+# 41. PERSONAL PROFILE VS PUBLIC PROFILE
+
+These should not be identical.
+
+## Private “My Profile”
+
+The owner sees:
+
+* prayer history;
+* journal;
+* private requests;
+* progress;
+* Compass;
+* saved resources;
+* personal milestones.
+
+## Public Profile
+
+Other users might only see approved information such as:
+
+* photo;
+* first name;
+* bio;
+* general location;
+* selected interests;
+* approved testimony;
+* selected badges.
+
+Private prayer requests, counselling cases, phone numbers and emails should never appear here.
+
+---
+
+# 42. NOTIFICATION ENGINE
+
+Notifications should support the user's growth rather than create noise.
+
+Possible notification categories:
+
+### Growth
+
+“Your Day 5 journey activity is ready.”
+
+### Prayer
+
+“Someone needs prayer today.”
+
+### Mission
+
+“Your weekly mission is available.”
+
+### Event
+
+“Kingdom Seekers Intercedes begins in 3 days.”
+
+### Community
+
+“Someone replied to your discussion.”
+
+### Counselling
+
+“You have received a response from your counsellor.”
+
+### Announcement
+
+Important ministry communication.
+
+The initial source states that users cannot change notification preferences.
+
+For long-term product quality, however, the team may eventually want to reconsider this and provide sensible notification controls to avoid notification fatigue.
+
+---
+
+# 43. PERSONALIZATION ENGINE
+
+Personalization should progressively improve as the application understands:
+
+* Journey stage;
+* Compass results;
+* completed missions;
+* event participation;
+* saved content;
+* ministry interests;
+* location;
+* previous activity.
+
+For example:
+
+**Good evening, Jude.**
+
+Your last activity was prayer.
+
+**Continue your 7-Day Prayer Journey**
+
+or
+
+**Your Compass shows an interest in outreach. There is an outreach opportunity this Saturday.**
+
+This extends the personalization concept already described in the original vision.
+
+---
+
+# 44. SEARCH & DISCOVERY
+
+As content grows, users should be able to search across:
+
+* Media
+* Events
+* Missions
+* Community
+* Testimonies
+* Journey Programs
+
+Possible filters:
+
+**Topic**
+
+**Category**
+
+**Location**
+
+**Date**
+
+**Content Type**
+
+---
+
+# 45. SAVED ITEMS
+
+Users should be able to bookmark:
+
+* sermons;
+* devotionals;
+* testimonies;
+* media;
+* events;
+* missions where appropriate.
+
+A dedicated **Saved** area should live inside the profile/library.
+
+---
+
+# 46. ONBOARDING EXPERIENCE
+
+Onboarding should be progressive rather than overwhelming.
+
+## Step 1 — Welcome
+
+**Welcome to The Seekers’ Hub**
+
+“Discover. Grow. Pray. Serve. Impact.”
+
+## Step 2 — Account
+
+* Name
+* Email
+* Phone
+* Password
+
+## Step 3 — Basic Profile
+
+* Photo
+* Location
+* Age Bracket
+* Bio
+
+Users should be allowed to skip optional profile information, consistent with the original specification.
+
+## Step 4 — Interests
+
+“What would you like to focus on?”
+
+* Spiritual Growth
+* Prayer
+* Purpose
+* Service
+* Community
+* Events
+
+## Step 5 — Start
+
+**Begin Your Journey**
+
+Additional Compass questions can be completed later.
+
+---
+
+# 47. NAVIGATION ARCHITECTURE
+
+The core bottom navigation remains:
+
+**Home | Journey | Pray | Missions | Compass**
+
+This mirrors the original navigation specification.
+
+Additional experiences should live under:
+
+**Explore / More**
+
+containing:
+
+* Events
+* Impact Map
+* Media
+* Community
+* Testimonies
+* Shepherd’s Care
+* Profile
+* Saved
+
+This protects the five-part core experience from becoming overloaded.
+
+---
+
+# 48. ADMIN OPERATING SYSTEM
+
+The Admin Dashboard is effectively the operating system behind the community.
+
+It should include:
+
+## Overview
+
+* Total Members
+* Active Users
+* Prayer Activity
+* Mission Activity
+* Journey Completion
+* Event Registrations
+* Upcoming Events
+* Pending Moderation
+* Counselling Queue
+* New Testimonies
+* Impact Statistics
+
+---
+
+# 49. ADMIN MODULES
+
+## User Management
+
+* View
+* Search
+* Edit
+* Suspend
+* Permissions
+
+## Journey Management
+
+* Create journeys
+* Create stages
+* Add daily activities
+* Add Scripture
+* Schedule challenges
+
+## Prayer Management
+
+* Moderate requests
+* Handle reports
+* View aggregate statistics
+
+## Mission Management
+
+* Create missions
+* Categorize
+* Schedule
+* Create event missions
+
+## Events
+
+* Create
+* Update
+* Registration
+* Capacity
+* Export
+
+## Impact Map
+
+* Add locations
+* Add statistics
+* Add stories
+* Add images
+
+## Compass
+
+* Manage questions
+* Manage scoring/categories
+* Manage recommendations
+
+## Media
+
+* Upload
+* Categorize
+* Organize
+
+## Community
+
+* Moderate posts
+* Review reports
+* Suspend users where necessary
+
+## Testimonies
+
+* Review
+* Approve
+* Reject
+
+## Shepherd’s Care
+
+Restricted access only.
+
+## Notifications
+
+* Announcements
+* Scheduling
+* Targeted notifications
+
+These areas largely correspond with the administration requirements in the source document.
+
+---
+
+# 50. ROLE-BASED ADMINISTRATION
+
+Instead of one universal Admin role:
+
+### Super Admin
+
+Full platform management.
+
+### Events Admin
+
+Events and registrations only.
+
+### Media Admin
+
+Media library only.
+
+### Prayer Moderator
+
+Prayer Exchange moderation.
+
+### Mission Admin
+
+Mission management.
+
+### Community Moderator
+
+Community/reporting.
+
+### Compass Manager
+
+Compass content.
+
+### Impact Manager
+
+Impact map.
+
+### Counselling Team
+
+Restricted Shepherd’s Care access.
+
+This follows the original requirement that administrative sections be delegatable—for example, allowing the Media Team to manage only Media.
+
+---
+
+# 51. DATA ARCHITECTURE
+
+Major entities should include:
+
+### Identity
+
+Users
+Profiles
+Roles
+Permissions
+
+### Growth
+
+Journey Programs
+Journey Stages
+Journey Activities
+Journey Progress
+Journal Entries
+Milestones
+
+### Compass
+
+Compass Questions
+Compass Responses
+Compass Profiles
+Compass Categories
+Recommendations
+
+### Prayer
+
+Prayer Requests
+Prayer Interactions
+Prayer Updates
+Prayer Circles
+Prayer Streaks
+
+### Missions
+
+Missions
+Mission Categories
+Mission Participants
+Mission Completions
+Mission Reflections
+
+### Impact
+
+Impact Locations
+Activities
+Impact Metrics
+Stories
+Photos
+
+### Events
+
+Events
+Registrations
+Attendance
+Event Teams
+
+### Community
+
+Posts
+Comments
+Reactions
+Reports
+Groups
+Memberships
+
+### Content
+
+Media
+Media Categories
+Saved Items
+
+### Testimonies
+
+Testimony Submissions
+Approvals
+Media Attachments
+
+### Care
+
+Counselling Requests
+Assignments
+Counsellor Notes
+Follow-Ups
+Case Status
+
+### Platform
+
+Notifications
+Device Tokens
+Audit Logs
+Admin Activity
+
+The original specification already identifies the foundational database entities for users, prayer, events, missions, journeys, Compass, impact, testimonies, media, community, notifications and administrators.
+
+---
+
+# 52. PRIVACY & SAFETY PRINCIPLES
+
+Privacy should be designed into the architecture rather than added later.
+
+Users should be able to:
+
+* edit their information;
+* control profile visibility;
+* control prayer-request visibility;
+* report content;
+* block users where appropriate.
+
+Private information such as phone numbers, email addresses and private prayer requests should never be exposed publicly.
+
+---
+
+# 53. CONTENT MODERATION
+
+Moderation will be required for:
+
+* Prayer requests
+* Community posts
+* Comments
+* Uploaded photos
+* Testimonies
+* User reports
+* Profile content
+
+The platform should have:
+
+**Report**
+
+↓
+
+**Review**
+
+↓
+
+**Decision**
+
+↓
+
+**Warn / Remove / Suspend / No Action**
+
+↓
+
+**Audit Record**
+
+---
+
+# 54. GAMIFICATION PRINCIPLE
+
+Gamification should encourage consistency without turning spirituality into a competition.
+
+Suitable elements:
+
+* personal streaks;
+* milestones;
+* journey completion;
+* personal badges;
+* progress bars;
+* participation history.
+
+Avoid:
+
+* public spirituality leaderboards;
+* “best Christian” rankings;
+* prayer competitions;
+* popularity rankings;
+* unnecessary follower counts;
+* aggressive engagement metrics.
+
+This preserves the explicit principle in the vision that spiritual progress and missions should not become competitive.
+
+---
+
+# 55. DESIGN VISION
+
+The design should feel:
+
+* Clean
+* Minimal
+* Warm
+* Spiritual
+* Youthful
+* Elegant
+* Modern
+* Premium
+* Highly readable
+
+It should **not** look like:
+
+* a generic church template;
+* an old event website;
+* a social-media clone;
+* a childish Bible app;
+* a cluttered dashboard.
+
+The source explicitly calls for a serious, modern and youthful visual identity with restrained spiritual elements and animation.
+
+---
+
+# 56. DESIGN LANGUAGE
+
+Recommended emotional direction:
+
+**Peace + Purpose + Community + Movement**
+
+Potential visual motifs:
+
+* subtle light;
+* pathways;
+* sunrise;
+* compass;
+* journey lines;
+* map points;
+* gentle gradients;
+* human photography;
+* understated faith symbols.
+
+Spiritual symbolism should support the interface rather than overpower it.
+
+---
+
+# 57. PRODUCT SUCCESS METRICS
+
+The product should measure meaningful participation rather than raw screen time.
+
+## Activation
+
+* Account created
+* Onboarding completed
+* First Journey started
+* First prayer offered
+* First mission accepted
+
+## Growth
+
+* Journey completion rate
+* Weekly active journey users
+* Journal activity
+* Repeat participation
+
+## Prayer
+
+* Requests submitted
+* Requests prayed for
+* Prayer participants
+* Answered prayer updates
+
+## Mission
+
+* Missions accepted
+* Missions completed
+* Reflections submitted
+* Outreach participation
+
+## Events
+
+* Registrations
+* Attendance
+* Repeat attendance
+* Volunteer participation
+
+## Purpose
+
+* Compass completions
+* Recommended opportunities opened
+* Compass-to-mission conversion
+
+## Community
+
+* Healthy discussions
+* Reports
+* Moderation rate
+* Group participation
+
+## Care
+
+* Counselling requests
+* Assignment time
+* Follow-up completion
+* Closed cases
+
+## Impact
+
+* People reached
+* Volunteers
+* Locations
+* Outreach programs
+* Testimonies
+* Community initiatives
+
+---
+
+# 58. NORTH STAR METRIC
+
+The product should avoid using simple daily app usage as its primary success metric.
+
+A stronger conceptual North Star is:
+
+### Meaningful Kingdom Participation
+
+A meaningful participation could occur when a user:
+
+* completes a Journey action;
+* prays for someone;
+* completes a Mission;
+* attends or volunteers at an event;
+* participates in outreach;
+* receives or provides appropriate support.
+
+This better reflects the purpose of the application.
+
+---
+
+# 59. MVP — VERSION 1
+
+The first version should prove the central loop rather than attempt to launch everything simultaneously.
+
+## Build First
+
+### Authentication
+
+* Registration
+* Login
+* Profile
+
+### Home
+
+* Personalized dashboard
+* Today's Journey
+* Prayer prompt
+* Mission
+* Upcoming event
+
+### Revival Journey
+
+* Daily activities
+* Progress
+* Streak
+* Journal
+
+### Prayer Exchange
+
+* Submit request
+* Anonymous request
+* Pray
+* I Prayed
+* Prayer count
+
+### Kingdom Missions
+
+* View mission
+* Accept
+* Complete
+* Reflection
+
+### Events
+
+* View
+* Register
+* Confirmation
+
+### Basic Admin
+
+* Users
+* Journeys
+* Prayer
+* Missions
+* Events
+* Notifications
+
+### Safety
+
+* Reporting
+* Basic moderation
+* Privacy settings
+
+This creates a complete first loop:
+
+**Grow → Pray → Serve → Participate**
+
+---
+
+# 60. VERSION 1.5
+
+Once the foundation is stable:
+
+* Kingdom Compass
+* Compass recommendations
+* Testimonies
+* Media Hub
+* Impact statistics
+* Advanced notifications
+* Saved items
+
+---
+
+# 61. VERSION 2
+
+Add:
+
+* Kingdom Impact Map
+* Community groups
+* Prayer Circles
+* richer personalization;
+* Compass-to-opportunity recommendations;
+* advanced role-based administration;
+* QR event registration;
+* attendance/check-in;
+* deeper analytics.
+
+---
+
+# 62. VERSION 3
+
+Expand into:
+
+* Shepherd’s Care
+* structured counselling workflow;
+* assigned counsellors;
+* secure case management;
+* international Impact Map;
+* intelligent recommendations;
+* local ministry teams;
+* regional leadership;
+* multi-country support.
+
+Shepherd’s Care can appear earlier if it is an immediate organizational requirement, but its privacy and operational complexity means it should not be treated as a lightweight add-on.
+
+---
+
+# 63. FUTURE INTELLIGENCE LAYER
+
+AI should eventually support the ecosystem without pretending to replace spiritual leadership or professional counselling.
+
+Possible applications:
+
+### Smart Journey Recommendations
+
+Recommend appropriate journeys from user interests/activity.
+
+### Mission Suggestions
+
+Surface relevant service opportunities.
+
+### Compass Recommendations
+
+Translate Compass patterns into possible ministry/service options.
+
+### Content Discovery
+
+Recommend sermons, devotionals and resources.
+
+### Search
+
+Natural-language discovery of approved Kingdom Seekers content.
+
+### Admin Assistance
+
+Summarize aggregate participation trends.
+
+AI should **not** declare:
+
+“You are called by God to become X.”
+
+Instead:
+
+“Based on your responses, leadership and outreach appear to be areas you may want to explore.”
+
+---
+
+# 64. THE CONNECTED PRODUCT LOOP
+
+This should become the strongest part of The Seekers’ Hub.
+
+Example:
+
+**KINGDOM COMPASS**
+
+“You show strong interest in Outreach.”
+
+↓
+
+**REVIVAL JOURNEY**
+
+Start:
+“7 Days of Compassion”
+
+↓
+
+**PRAYER EXCHANGE**
+
+Pray for someone in need.
+
+↓
+
+**KINGDOM MISSION**
+
+Serve during Saturday's outreach.
+
+↓
+
+**EVENT**
+
+Register for the outreach.
+
+↓
+
+**IMPACT MAP**
+
+Your team's outreach appears in Ogun State.
+
+↓
+
+**REFLECTION**
+
+Record what you learned.
+
+↓
+
+**TESTIMONY**
+
+Share an approved testimony.
+
+↓
+
+**NEXT JOURNEY**
+
+Continue growing.
+
+That is how the product becomes **one ecosystem instead of 10 independent features.**
+
+---
+
+# 65. THE PRODUCT FLYWHEEL
+
+The long-term growth loop can be represented as:
+
+**Discover Purpose**
+
+→
+
+**Develop Spiritually**
+
+→
+
+**Pray for Others**
+
+→
+
+**Take Action**
+
+→
+
+**Join Community**
+
+→
+
+**Create Real-World Impact**
+
+→
+
+**See Impact**
+
+→
+
+**Become More Motivated to Grow and Serve**
+
+→
+
+**Repeat**
+
+---
+
+# 66. CORE PRODUCT PRINCIPLES
+
+Every product decision should pass these tests.
+
+### 1. Growth Before Engagement
+
+Do not optimize simply for more time inside the app.
+
+Optimize for real spiritual action.
+
+### 2. Action Before Consumption
+
+Content should regularly lead toward reflection, prayer, service or growth.
+
+### 3. Community Without Popularity
+
+Avoid social-media popularity mechanics.
+
+### 4. Progress Without Spiritual Competition
+
+Track personal consistency without ranking faith.
+
+### 5. Privacy by Design
+
+Prayer and counselling require strong confidentiality.
+
+### 6. Purpose Without False Certainty
+
+Compass offers guidance, not declarations of divine calling.
+
+### 7. Digital → Physical
+
+The product should regularly move users toward real people, real service and real community.
+
+### 8. Connected Experiences
+
+Every module should connect naturally with at least one other module.
+
+### 9. Admin Simplicity
+
+Kingdom Seekers staff should be able to operate the platform without technical expertise.
+
+### 10. Scalable Foundation
+
+Architecture should support growth from a local community to a much larger movement.
+
+---
+
+# 67. WHAT THE APP IS NOT
+
+The Seekers’ Hub is **not simply**:
+
+* a church app;
+* an event-registration app;
+* a prayer-request app;
+* a Bible-reading tracker;
+* a Christian social network;
+* a sermon library;
+* a personality test;
+* a counselling portal.
+
+Each of those may exist inside it.
+
+But the complete product is:
+
+## A Spiritual Growth & Kingdom Impact Ecosystem
+
+that helps a person move continuously through:
+
+### DISCOVER → GROW → PRAY → SERVE → IMPACT.
+
+---
+
+# 68. ONE-SENTENCE PRODUCT POSITIONING
+
+**The Seekers’ Hub is a spiritual-growth and Kingdom-impact platform that helps people discover where they can serve, grow intentionally, pray for others, take practical faith-driven action, connect with community, and see the real-world impact they are creating together.**
+
+---
+
+# 69. SHORT PRODUCT PITCH
+
+**Discover your path. Grow in your faith. Pray for someone. Serve with purpose. See the impact.**
+
+The Seekers’ Hub brings spiritual growth, prayer, purpose discovery, missions, events, community, support and real-world Kingdom impact into one connected experience.
+
+---
+
+# 70. ULTIMATE PRODUCT EXPERIENCE
+
+A successful user should eventually be able to say:
+
+**“This app helps me know where I am spiritually, what I should focus on next, who I can pray for, where I can serve, how I can grow, where my strengths may fit, how to receive help when I need it, and how our community is making a difference.”**
+
+That should remain the standard against which every future feature of **The Seekers’ Hub** is evaluated.
