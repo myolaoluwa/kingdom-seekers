@@ -16,8 +16,8 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 
 ## Run locally
 
-1. Create a Supabase project. In its SQL editor, run [`supabase/migrations/202609230001_v1.sql`](supabase/migrations/202609230001_v1.sql) once. It creates the V1 tables, access policies, triggers, starter missions, events, and welcome announcement.
-2. Replace the two placeholder values already in `.env.local`: `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`. Find both in the Supabase project **Connect** dialog. These are the only Supabase environment variables this V1 app reads. Never place a secret or service-role key in a `NEXT_PUBLIC_` variable.
+1. In the Supabase project SQL editor, run [`supabase/migrations/202609230001_v1.sql`](supabase/migrations/202609230001_v1.sql) once. It creates the V1 tables, access policies, triggers, starter missions, events, and welcome announcement. The live project currently does not have these tables.
+2. The ignored `.env.local` is configured for project `ulbmhpohfzafosjzycor`. Copy [`.env.example`](.env.example) and use your own project values if you need a different Supabase project. The browser uses `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; server routes use `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_JWKS_URL`. Never place a secret or service-role key in a `NEXT_PUBLIC_` variable.
 3. Run `npm install`, then `npm run dev`. Open <http://localhost:3000>.
 4. Register an account. If email confirmation is enabled in Supabase Auth, confirm the email before signing in.
 5. To appoint the first admin, find that account’s UUID in Supabase Authentication → Users, then run this in the Supabase SQL editor (replace the placeholder):
@@ -35,14 +35,7 @@ The seeded events are examples and should be updated in Staff studio before invi
 
 This repository is linked to the Vercel project `delight12/kingdom-seekers`, with GitHub connected to `main`. The production alias is <https://kingdom-seekers-delight12.vercel.app>. The Vercel team's deployment protection currently requires a Vercel login to view it.
 
-The project does not yet have Supabase environment values on Vercel. After you have real project values, add both for production with the Vercel CLI:
-
-```bash
-vercel env add NEXT_PUBLIC_SUPABASE_URL production
-vercel env add NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY production
-```
-
-Enter each value at the CLI prompt. Add the same names for `preview` if you want pull request previews to use Supabase. Then trigger a new production deployment with `vercel --prod` or push a commit to `main`. Do not add placeholders or secret/service-role keys to Vercel's public variables.
+The five Supabase variables above are configured in Vercel for Production, Preview, and Development. Pushing to `main` triggers a production deployment. The supplied `SUPABASE_SECRET_KEY` was masked, so it was not configured; this V1 app uses row-level-security-scoped member access and does not require that key. The authenticated `GET /api/me` route uses `@supabase/server` to verify a bearer JWT and return the caller's profile under row-level security.
 
 ## Checks
 
