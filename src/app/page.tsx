@@ -29,6 +29,7 @@ const more: { id: Page; label: string; icon: typeof Home }[] = [
   { id: 'community', label: 'Community', icon: Users }, { id: 'events', label: 'Events', icon: CalendarDays },
   { id: 'profile', label: 'My profile', icon: Sparkles }, { id: 'admin', label: 'Staff studio', icon: ShieldCheck },
 ];
+const EMAIL_OTP_LENGTH = 8;
 const date = (value: string) => new Date(value).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' });
 
 export default function App() {
@@ -219,7 +220,7 @@ function Auth({ client, mode, setMode }: { client: SupabaseClient; mode: 'login'
     const isSignup = stage === 'signup-code';
     return <div className="onboard-screen"><div className="onboard-card"><Image src="/logo.png" alt="Kingdom Seekers" width={100} height={80} /><span className="eyebrow">{isSignup ? 'CONFIRM YOUR ACCOUNT' : 'ACCOUNT RECOVERY'}</span><h1>{stage === 'recovery-email' ? 'Reset your password' : 'Enter your email code'}</h1><p>{stage === 'recovery-email' ? 'We’ll email a code if this address has an account.' : email.trim() ? `Enter the code sent to ${email.trim()}.` : 'Enter your email address and the code we sent you.'}</p>
       {stage === 'recovery-email' ? <form onSubmit={requestReset}><label>Email address<input required type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} /></label>{error && <div className="form-message" role="alert">{error}</div>}<Submit busy={busy}>Send reset code</Submit></form>
-        : <form onSubmit={verifyCode}><label>Email address<input required type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} /></label><label>Verification code<input required inputMode="numeric" pattern="[0-9]{6}" maxLength={6} autoComplete="one-time-code" value={code} onChange={event => setCode(event.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="6-digit code" /></label>{notice && <div className="form-message" role="status">{notice}</div>}{error && <div className="form-message" role="alert">{error}</div>}<Submit busy={busy}>Verify code</Submit></form>}
+        : <form onSubmit={verifyCode}><label>Email address<input required type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} /></label><label>Verification code<input required inputMode="numeric" pattern={`[0-9]{${EMAIL_OTP_LENGTH}}`} maxLength={EMAIL_OTP_LENGTH} autoComplete="one-time-code" value={code} onChange={event => setCode(event.target.value.replace(/\D/g, '').slice(0, EMAIL_OTP_LENGTH))} placeholder={`${EMAIL_OTP_LENGTH}-digit code`} /></label>{notice && <div className="form-message" role="status">{notice}</div>}{error && <div className="form-message" role="alert">{error}</div>}<Submit busy={busy}>Verify code</Submit></form>}
       {stage !== 'recovery-email' && <button className="text-button" disabled={busy || !email.trim()} onClick={() => void resendCode()}>Send a new code</button>}
       <button className="text-button" onClick={() => { setStage('form'); setCode(''); setError(''); setNotice(''); setMode('login'); }}>Back to sign in</button></div></div>;
   }
