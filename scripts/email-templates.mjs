@@ -76,7 +76,7 @@ const templates = [
 ];
 
 function render(template) {
-  const socialHtml = socialLinks.map(({ name, url }) => `<a href="${url.replaceAll('&', '&amp;')}" style="color:#843522;text-decoration:underline">${name}</a>`).join('&nbsp;&nbsp;·&nbsp;&nbsp;');
+  const socialHtml = socialLinks.map(({ name, url, icon }) => `<a href="${url.replaceAll('&', '&amp;')}" style="display:inline-block;margin:0 13px 9px 0;color:#843522;text-decoration:underline;white-space:nowrap"><img src="https://raw.githubusercontent.com/myolaoluwa/kingdom-seekers/main/public/social/${icon}" width="18" height="18" alt="" style="display:inline-block;width:18px;height:18px;border:0;vertical-align:middle">&nbsp;${name}</a>`).join('');
   const button = template.action ? `
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 26px"><tr><td bgcolor="#a44932" style="border-radius:8px"><a href="${template.href}" style="display:inline-block;background:#a44932;border:1px solid #a44932;border-radius:8px;color:#ffffff;font-size:15px;font-weight:700;line-height:20px;padding:15px 25px;text-decoration:none">${template.action} &nbsp;→</a></td></tr></table>
                         ${template.href === confirmationURL ? `<p style="margin:0 0 24px;color:#847570;font-size:12px;line-height:19px">Button not working? <a href="${confirmationURL}" style="color:#843522;text-decoration:underline">Open the secure link</a>.</p>` : ''}` : '';

@@ -1,18 +1,22 @@
 [
   {
     "name": "TikTok",
+    "icon": "tiktok.png",
     "url": "https://www.tiktok.com/@theksglobal?_r=1&_t=ZS-99zGcpaaUgk"
   },
   {
     "name": "Facebook",
+    "icon": "facebook.png",
     "url": "https://www.facebook.com/share/1ErZx7RSYX/?mibextid=wwXIfr"
   },
   {
     "name": "Instagram",
+    "icon": "instagram.png",
     "url": "https://www.instagram.com/theksglobal?stkn=NDdoOXRjMWJqOHhw"
   },
   {
     "name": "YouTube",
+    "icon": "youtube.png",
     "url": "https://youtube.com/@theksglobal?si=dPlQMZXd9t8hutL9"
   }
 ]

@@ -175,7 +175,7 @@ function SocialLinks({ placement }: { placement: 'auth' | 'dashboard' | 'card' }
   return <footer className={`social-footer social-footer--${placement}`}>
     <span className="social-footer-label">FOLLOW THE JOURNEY</span>
     <nav aria-label="Kingdom Seekers social media">
-      {socialLinks.map(link => <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`Kingdom Seekers on ${link.name}`}>{link.name}</a>)}
+      {socialLinks.map(link => <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer" aria-label={`Kingdom Seekers on ${link.name}`}><Image src={`/social/${link.icon}`} width={18} height={18} alt="" />{link.name}</a>)}
     </nav>
   </footer>;
 }
