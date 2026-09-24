@@ -19,7 +19,7 @@ type Page = 'home' | 'journey' | 'prayer' | 'missions' | 'compass' | 'community'
 type Profile = { id: string; full_name: string; first_name: string; location: string; bio: string; interests: string[]; public_profile: boolean; onboarding_complete: boolean; avatar_path: string | null };
 type Prayer = { id: string; user_id: string; body: string; category: string; visibility: 'anonymous' | 'first_name' | 'private'; display_name: string; status: string; prayer_count: number; created_at: string };
 type Mission = { id: string; title: string; description: string; category: string; location: string; date_text: string; interest_tag: string; published: boolean };
-type Event = { id: string; title: string; description: string; starts_at: string; venue: string; location: string; capacity: number | null; published: boolean; image_paths: string[]; attachment_path: string | null; attachment_name: string | null };
+type Event = { id: string; title: string; description: string; starts_at: string; ends_at: string | null; venue: string; location: string; capacity: number | null; published: boolean; image_paths: string[]; attachment_path: string | null; attachment_name: string | null };
 type Post = { id: string; user_id: string; kind: string; body: string; status: string; created_at: string };
 type Report = { id: string; target_type: string; target_id: string; reason: string; status: string; created_at: string };
 type Notice = { id: string; title: string; body: string; created_at: string };
@@ -319,7 +319,7 @@ function downloadCalendarInvite(event: Event) {
   const escape = (value: string) => value.replace(/\\/g, '\\\\').replace(/,/g, '\\,').replace(/;/g, '\\;').replace(/\n/g, '\\n');
   const stamp = (value: Date) => value.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
   const start = new Date(event.starts_at);
-  const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+  const end = event.ends_at ? new Date(event.ends_at) : new Date(start.getTime() + 2 * 60 * 60 * 1000);
   const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Kingdom Seekers//Events//EN',
     'BEGIN:VEVENT', `UID:${event.id}@kingdomseekers`, `DTSTAMP:${stamp(new Date())}`,
     `DTSTART:${stamp(start)}`, `DTEND:${stamp(end)}`, `SUMMARY:${escape(event.title)}`,
@@ -351,7 +351,7 @@ function EventsPage({ data, busy, run, db, userId }: SectionProps) {
           <div className="date-tile"><strong>{new Date(event.starts_at).toLocaleDateString('en-NG', { day: '2-digit' })}</strong><span>{new Date(event.starts_at).toLocaleDateString('en-NG', { month: 'short' }).toUpperCase()}</span></div>
           <div className="event-info"><span className="eyebrow">KINGDOM SEEKERS EVENT</span><h2>{event.title}</h2>
             <EventMedia client={db} event={event} /><p>{event.description}</p>
-            <div className="event-meta"><span><CalendarDays size={16} /> {date(event.starts_at)} ? {new Date(event.starts_at).toLocaleTimeString('en-NG', { hour: 'numeric', minute: '2-digit' })}</span><span>{event.venue}, {event.location}</span></div>
+            <div className="event-meta"><span><CalendarDays size={16} /> {date(event.starts_at)} - {new Date(event.starts_at).toLocaleTimeString('en-NG', { hour: 'numeric', minute: '2-digit' })}{event.ends_at ? ` to ${new Date(event.ends_at).toLocaleTimeString('en-NG', { hour: 'numeric', minute: '2-digit' })}` : ''}</span><span>{event.venue}, {event.location}</span></div>
             <button className="text-button" onClick={() => downloadCalendarInvite(event)}><CalendarDays size={15} /> Add to my calendar</button>
           </div>
           <div className="event-action">{registration ? <span className="complete-note"><CheckCircle2 size={18} /> Registered ? {registration.group_size} {registration.group_size === 1 ? 'person' : 'people'}</span> : <><label>Group size<input type="number" min={1} max={20} value={groupSizes[event.id] || 1} onChange={change => setGroupSizes(old => ({ ...old, [event.id]: Number(change.target.value) }))} /></label><button className="button" disabled={busy} onClick={() => run(() => db.from('event_registrations').insert({ event_id: event.id, user_id: userId, group_size: groupSizes[event.id] || 1 }), 'You are registered. We look forward to seeing you!')}>Register <ArrowRight size={16} /></button></>}</div>

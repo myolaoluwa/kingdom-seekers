@@ -14,6 +14,7 @@ export const POST = withSupabase({ auth: 'user' }, async (request, context) => {
   const venue = typeof payload?.venue === 'string' ? payload.venue.trim() : '';
   const location = typeof payload?.location === 'string' ? payload.location.trim() : '';
   const startsAt = typeof payload?.startsAt === 'string' ? payload.startsAt : '';
+  const endsAt = typeof payload?.endsAt === 'string' ? payload.endsAt : '';
   const capacity = payload?.capacity;
   const imagePaths = payload?.imagePaths;
   const attachmentPath = payload?.attachmentPath ?? null;
@@ -21,6 +22,8 @@ export const POST = withSupabase({ auth: 'user' }, async (request, context) => {
   if (!uuid.test(id) || !title || title.length > 160 || !description || description.length > 5000
     || !venue || venue.length > 200 || !location || location.length > 200
     || !startsAt || !Number.isFinite(Date.parse(startsAt)) || Date.parse(startsAt) <= Date.now()
+    || !endsAt || !Number.isFinite(Date.parse(endsAt)) || Date.parse(endsAt) <= Date.parse(startsAt)
+    || Date.parse(endsAt) > Date.parse(startsAt) + 7 * 24 * 60 * 60 * 1000
     || !Number.isInteger(capacity) || capacity < 1 || capacity > 100000
     || !Array.isArray(imagePaths) || imagePaths.length > 5 || imagePaths.some(path => typeof path !== 'string')
     || (attachmentPath !== null && typeof attachmentPath !== 'string')
@@ -36,6 +39,7 @@ export const POST = withSupabase({ auth: 'user' }, async (request, context) => {
 
   const { data: eventId, error: publishError } = await context.supabase.rpc('create_upcoming_event', {
     event_id: id, event_title: title, event_description: description, event_starts_at: startsAt,
+    event_ends_at: endsAt,
     event_venue: venue, event_location: location, event_capacity: capacity,
     event_image_paths: imagePaths, event_attachment_path: attachmentPath, event_attachment_name: attachmentName,
   });

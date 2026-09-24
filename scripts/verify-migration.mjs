@@ -28,6 +28,8 @@ try {
   await db.exec(communityChat);
   const eventMedia = readFileSync(new URL('../supabase/migrations/202609240004_event_media_push.sql', import.meta.url), 'utf8');
   await db.exec(eventMedia);
+  const eventEnd = readFileSync(new URL('../supabase/migrations/202609240005_event_end_time.sql', import.meta.url), 'utf8');
+  await db.exec(eventEnd);
   await db.exec(`grant usage on schema public, auth to authenticated;
     grant select, insert, update, delete on all tables in schema public to authenticated;
     grant execute on all functions in schema public to authenticated;
@@ -109,18 +111,20 @@ try {
 
   let eventPublishBlocked = false;
   try { await db.exec(`select public.create_upcoming_event('00000000-0000-0000-0000-000000000091',
-    'Unauthorized event','Details',now() + interval '1 day','Hall','Lagos',50,'{}',null,null);`); }
+    'Unauthorized event','Details',now() + interval '1 day',now() + interval '1 day 2 hours','Hall','Lagos',50,'{}',null,null);`); }
   catch { eventPublishBlocked = true; }
   if (!eventPublishBlocked) throw new Error('Ordinary member could publish an event');
   await db.exec(`reset role; set request.jwt.claim.sub = '00000000-0000-0000-0000-000000000001'; set role authenticated;
     select public.create_upcoming_event('00000000-0000-0000-0000-000000000092',
-      'Community gathering','Gather with us',now() + interval '2 days','Main Hall','Lagos',50,'{}',null,null);`);
+      'Community gathering','Gather with us',now() + interval '2 days',now() + interval '2 days 3 hours','Main Hall','Lagos',50,'{}',null,null);`);
   const eventNotice = await db.query("select count(*)::int as count from public.notifications where title='New event: Community gathering'");
   if (eventNotice.rows[0].count !== 1) throw new Error('Publishing an event did not create a community notice');
+  const eventDuration = await db.query("select extract(epoch from (ends_at - starts_at))::int as seconds from public.events where id='00000000-0000-0000-0000-000000000092'");
+  if (eventDuration.rows[0]?.seconds !== 10800) throw new Error('Event end time was not saved');
   await db.exec("select * from public.event_push_subscriptions('00000000-0000-0000-0000-000000000092');");
   let foreignEventMediaBlocked = false;
   try { await db.exec(`select public.create_upcoming_event('00000000-0000-0000-0000-000000000093',
-    'Media spoof','Details',now() + interval '2 days','Hall','Lagos',50,
+    'Media spoof','Details',now() + interval '2 days',now() + interval '2 days 2 hours','Hall','Lagos',50,
     array['00000000-0000-0000-0000-000000000003/00000000-0000-0000-0000-000000000093/photo.jpg'],null,null);`); }
   catch { foreignEventMediaBlocked = true; }
   if (!foreignEventMediaBlocked) throw new Error('Event could claim another member media');

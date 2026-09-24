@@ -17,6 +17,7 @@ export function EventPublisher({ client, userId, onPublished }: {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [startsAt, setStartsAt] = useState('');
+  const [endsAt, setEndsAt] = useState('');
   const [venue, setVenue] = useState('');
   const [location, setLocation] = useState('');
   const [capacity, setCapacity] = useState(100);
@@ -46,8 +47,12 @@ export function EventPublisher({ client, userId, onPublished }: {
     event.preventDefault();
     if (busy) return;
     const date = new Date(startsAt);
+    const end = new Date(endsAt);
     if (!Number.isFinite(date.getTime()) || date.getTime() <= Date.now()) {
       setError('Choose a future event date and time.'); return;
+    }
+    if (!Number.isFinite(end.getTime()) || end <= date || end.getTime() > date.getTime() + 7 * 24 * 60 * 60 * 1000) {
+      setError('Choose an end time after the start, within seven days.'); return;
     }
     setBusy(true); setError('');
     const id = crypto.randomUUID();
@@ -70,7 +75,7 @@ export function EventPublisher({ client, userId, onPublished }: {
       sentToServer = true;
       const response = await fetch('/api/events', {
         method: 'POST', headers: { Authorization: `Bearer ${auth.session.access_token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, title: title.trim(), description: description.trim(), startsAt: date.toISOString(),
+        body: JSON.stringify({ id, title: title.trim(), description: description.trim(), startsAt: date.toISOString(), endsAt: end.toISOString(),
           venue: venue.trim(), location: location.trim(), capacity, imagePaths, attachmentPath,
           attachmentName: attachment?.name.slice(0, 160) || null }),
       });
@@ -79,7 +84,7 @@ export function EventPublisher({ client, userId, onPublished }: {
         sentToServer = false;
         throw new Error(result.error || 'Could not publish the event.');
       }
-      setTitle(''); setDescription(''); setStartsAt(''); setVenue(''); setLocation('');
+      setTitle(''); setDescription(''); setStartsAt(''); setEndsAt(''); setVenue(''); setLocation('');
       setCapacity(100); setImages([]); setAttachment(null);
       const notice = result.warning || (result.subscribers === 0
         ? 'Event published. No members have enabled phone notifications yet.'
@@ -98,8 +103,9 @@ export function EventPublisher({ client, userId, onPublished }: {
     <form onSubmit={event => void submit(event)}>
       <label>Event title<input required maxLength={160} value={title} onChange={event => setTitle(event.target.value)} placeholder="e.g. Kingdom Seekers prayer night" /></label>
       <label>Details<textarea required maxLength={5000} value={description} onChange={event => setDescription(event.target.value)} placeholder="What should members know before they come?" /></label>
-      <div className="two-fields"><label><CalendarDays size={15} /> Date and time (your device time)<input required type="datetime-local" value={startsAt} onChange={event => setStartsAt(event.target.value)} /></label>
-        <label>Capacity<input required type="number" min={1} max={100000} value={capacity} onChange={event => setCapacity(Number(event.target.value))} /></label></div>
+      <div className="two-fields"><label><CalendarDays size={15} /> Starts (your device time)<input required type="datetime-local" value={startsAt} onChange={event => setStartsAt(event.target.value)} /></label>
+        <label>Ends (your device time)<input required type="datetime-local" value={endsAt} onChange={event => setEndsAt(event.target.value)} /></label></div>
+      <label>Capacity<input required type="number" min={1} max={100000} value={capacity} onChange={event => setCapacity(Number(event.target.value))} /></label>
       <div className="two-fields"><label>Venue<input required maxLength={200} value={venue} onChange={event => setVenue(event.target.value)} /></label>
         <label>City or location<input required maxLength={200} value={location} onChange={event => setLocation(event.target.value)} /></label></div>
       <div className="event-upload-grid"><label className="event-upload"><ImagePlus size={18} /><strong>Event images</strong><span>Up to 5 images, 10 MB each</span><input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={event => selectImages(event.target.files)} /></label>
