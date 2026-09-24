@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: 'Discover, grow, pray, serve and see the impact we make together.',
   manifest: '/manifest.webmanifest',
   appleWebApp: { capable: true, title: 'Seekers Hub', statusBarStyle: 'default' },
-  icons: { apple: '/pwa-192.png' },
+  icons: { icon: { url: '/icon.svg', type: 'image/svg+xml' }, apple: '/pwa-192.png' },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

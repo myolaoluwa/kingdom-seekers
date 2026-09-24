@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Kingdom Seekers">
+  <defs>
+    <linearGradient id="copper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd08b"/>
+      <stop offset="0.48" stop-color="#ec793e"/>
+      <stop offset="1" stop-color="#a83e25"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="13" fill="#28130f"/>
+  <rect x="1" y="1" width="62" height="62" rx="12" fill="none" stroke="#8b482e" stroke-width="2"/>
+  <path d="M8 45h48" fill="none" stroke="url(#copper)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M10 37h4v8h-4zm6-5h4v13h-4zm6-6h4v19h-4zm6-7h4v26h-4zm6-7h4v33h-4zm6 11h4v22h-4zm6 8h4v14h-4zm6 6h3v8h-3z" fill="url(#copper)"/>
+  <path d="M17 52h30" fill="none" stroke="#a94a30" stroke-width="2" stroke-linecap="round"/>
+</svg>

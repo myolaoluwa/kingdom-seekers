@@ -35,5 +35,5 @@
 .events-side{display:grid;gap:16px;align-content:start}.events-side .push-panel{padding:20px}.events-side .push-panel h3{font-size:16px}.events-side .push-panel p{font-size:11px}
 
 /* Crop the logo's transparent canvas margins and give the copper mark contrast. */
-.auth-story img{display:block;width:216px;height:138px;object-fit:cover;object-position:center 38%;background:radial-gradient(ellipse at center,#26110d 0%,#3d1b14 72%,#54251a 100%);border:1px solid rgba(255,183,136,.25);border-radius:14px;box-shadow:0 12px 28px rgba(24,8,5,.22);filter:brightness(1.16) saturate(1.2)}
-@media(max-width:780px){.auth-screen{grid-template-columns:minmax(0,1fr);overflow-x:hidden}.auth-story,.auth-form-wrap{min-width:0;width:100%}.auth-story img{width:164px;height:105px;border-radius:11px}.auth-story{min-height:290px}}
+.auth-story img{display:block;width:108px;height:69px;object-fit:cover;object-position:center 38%;background:radial-gradient(ellipse at center,#26110d 0%,#3d1b14 72%,#54251a 100%);border:1px solid rgba(255,183,136,.25);border-radius:8px;box-shadow:0 8px 18px rgba(24,8,5,.2);filter:brightness(1.16) saturate(1.2)}
+@media(max-width:780px){.auth-screen{grid-template-columns:minmax(0,1fr);overflow-x:hidden}.auth-story,.auth-form-wrap{min-width:0;width:100%}.auth-story img{width:82px;height:53px;border-radius:6px}.auth-story{min-height:250px}}
