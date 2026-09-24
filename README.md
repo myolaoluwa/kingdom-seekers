@@ -58,7 +58,7 @@ Before inviting members, test signup and recovery with an address you control an
 
 ## Vercel deployment
 
-This repository is linked to the Vercel project `delight12/kingdom-seekers`, with GitHub connected to `main`. The production alias is <https://kingdom-seekers-delight12.vercel.app>. Vercel Standard Protection keeps generated deployment URLs and previews private while allowing access to the production alias.
+This repository is linked to the Vercel project `delight12/kingdom-seekers`, with GitHub connected to `main`. The production alias is <https://kingdom-seekers-delight12.vercel.app>. Vercel Authentication protects preview deployments; production domains and production deployment URLs are public.
 
 The five Supabase variables and three VAPID variables in `.env.example` are configured in Vercel for Production, Preview, and Development. Pushing to `main` triggers a production deployment. The supplied `SUPABASE_SECRET_KEY` was masked, so it was not configured; this V1 app uses row-level-security-scoped member access and does not require that key. The authenticated `GET /api/me` route uses `@supabase/server` to verify a bearer JWT and return the caller's profile under row-level security. The `POST /api/announcements` route requires an admin JWT, publishes an in-app announcement, and sends Web Push to opted-in devices. Keep `VAPID_PRIVATE_KEY` server-only and reuse the key pair; rotating it requires members to subscribe again.
 
