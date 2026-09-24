@@ -4,6 +4,7 @@ import { join } from 'node:path';
 
 const directory = fileURLToPath(new URL('../supabase/email-templates/', import.meta.url));
 const envPath = fileURLToPath(new URL('../.env.auth.local', import.meta.url));
+const socialLinks = JSON.parse(readFileSync(new URL('../src/lib/social-links.json', import.meta.url), 'utf8'));
 const confirmationURL = '{{ .ConfirmationURL }}';
 const siteURL = '{{ .SiteURL }}';
 
@@ -75,6 +76,7 @@ const templates = [
 ];
 
 function render(template) {
+  const socialHtml = socialLinks.map(({ name, url }) => `<a href="${url.replaceAll('&', '&amp;')}" style="color:#843522;text-decoration:underline">${name}</a>`).join('&nbsp;&nbsp;·&nbsp;&nbsp;');
   const button = template.action ? `
                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 26px"><tr><td bgcolor="#a44932" style="border-radius:8px"><a href="${template.href}" style="display:inline-block;background:#a44932;border:1px solid #a44932;border-radius:8px;color:#ffffff;font-size:15px;font-weight:700;line-height:20px;padding:15px 25px;text-decoration:none">${template.action} &nbsp;→</a></td></tr></table>
                         ${template.href === confirmationURL ? `<p style="margin:0 0 24px;color:#847570;font-size:12px;line-height:19px">Button not working? <a href="${confirmationURL}" style="color:#843522;text-decoration:underline">Open the secure link</a>.</p>` : ''}` : '';
@@ -107,6 +109,7 @@ function render(template) {
       <tr><td bgcolor="#ffffff" style="background:#ffffff;border:1px solid #eee5df;border-top:0;border-radius:0 0 14px 14px;padding:20px 38px 25px;color:#847570;font-size:12px;line-height:19px">
         <strong style="color:#2d2522">Kingdom Seekers</strong><br>Growing together in passion, love, and peace.<br>
         <a href="${siteURL}" style="color:#843522;text-decoration:underline">Visit Kingdom Seekers</a>
+        <div style="border-top:1px solid #eee5df;margin-top:17px;padding-top:17px"><span style="display:block;margin-bottom:8px;color:#a44932;font-size:10px;font-weight:800;letter-spacing:1.5px">FOLLOW THE JOURNEY</span>${socialHtml}</div>
       </td></tr>
     </table>
   </td></tr></table>

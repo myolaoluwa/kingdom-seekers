@@ -12,6 +12,7 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 - Encouragement and testimony posts with pre-publication review and content reporting.
 - Event listing, capacity-aware individual/group registration, and confirmation.
 - Personalized home dashboard with the next step, progress, an event, and announcements.
+- Kingdom Seekers social links in account screens, the app footer, and every Auth email.
 - Role-aware staff studio for prayer and community moderation, reports, missions, events, announcements, and admin role assignment.
 
 ## Run locally
@@ -45,7 +46,7 @@ The Auth and SMTP settings have been applied to project `ulbmhpohfzafosjzycor`. 
 
 ### Branded Auth emails
 
-The eight HTML files in [`supabase/email-templates`](supabase/email-templates) cover signup confirmation, password recovery, invitation, magic link, email change, reauthentication, password-change notice, and email-change notice. Signup and recovery now contain one-time codes entered in the app; invitation and email-change flows retain links because the V1 app does not offer code-entry screens for those actions. They use the app's colors and text-based branding, so they do not depend on a remotely hosted logo image. Edit the copy in [`scripts/email-templates.mjs`](scripts/email-templates.mjs), then run `npm run auth:templates:build` to regenerate the HTML. Run `npm run auth:templates:apply` to update the hosted Supabase Auth subjects and content, or `npm run auth:templates:verify` to compare the hosted settings with the local files. The apply command also enables password-change and email-change security notices. It does not send messages.
+The eight HTML files in [`supabase/email-templates`](supabase/email-templates) cover signup confirmation, password recovery, invitation, magic link, email change, reauthentication, password-change notice, and email-change notice. Signup and recovery contain one-time codes entered in the app; invitation and email-change flows retain links because the V1 app does not offer code-entry screens for those actions. They use the app's colors and text-based branding, so they do not depend on a remotely hosted logo image. The four social URLs are shared with the app in [`src/lib/social-links.json`](src/lib/social-links.json). Edit the email copy in [`scripts/email-templates.mjs`](scripts/email-templates.mjs), then run `npm run auth:templates:build` to regenerate the HTML. Run `npm run auth:templates:apply` to update the hosted Supabase Auth subjects and content, or `npm run auth:templates:verify` to compare the hosted settings with the local files. The apply command also enables password-change and email-change security notices. It does not send messages.
 
 Before inviting members, resolve Brevo's `525` unauthorized-IP SMTP response and test signup and recovery with an address you control. Disable click tracking for these transactional messages because link rewriting can interfere with Auth confirmation links. The Vercel production deployment currently has access protection, so an email link may reach a protected page until that setting is changed.
 
