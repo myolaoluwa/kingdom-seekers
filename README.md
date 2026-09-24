@@ -14,15 +14,17 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 - Personalized home dashboard with the next step, progress, an event, and announcements.
 - Kingdom Seekers social links in account screens, the app footer, and every Auth email.
 - Role-aware staff studio for prayer and community moderation, reports, missions, events, announcements, and admin role assignment.
+- Verified support-mailbox admin access, member requests for staff roles, and admin approval in Staff studio.
+- Optional phone notifications for community announcements through Web Push. Members enable notifications on each device.
 
 ## Run locally
 
-1. The V1 migrations have been applied to project `ulbmhpohfzafosjzycor`. For a fresh Supabase project, run [`supabase/migrations/202609230001_v1.sql`](supabase/migrations/202609230001_v1.sql) followed by [`supabase/migrations/202609240001_backfill_profiles.sql`](supabase/migrations/202609240001_backfill_profiles.sql) in its SQL editor. The second migration creates profiles for accounts registered before the profile trigger existed.
+1. The V1 migrations have been applied to project `ulbmhpohfzafosjzycor`. For a fresh Supabase project, run [`supabase/migrations/202609230001_v1.sql`](supabase/migrations/202609230001_v1.sql), [`supabase/migrations/202609240001_backfill_profiles.sql`](supabase/migrations/202609240001_backfill_profiles.sql), and [`supabase/migrations/202609240002_staff_push.sql`](supabase/migrations/202609240002_staff_push.sql) in order in its SQL editor.
 2. The ignored `.env.local` is configured for project `ulbmhpohfzafosjzycor`. Copy [`.env.example`](.env.example) and use your own project values if you need a different Supabase project. The browser uses `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; server routes use `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_JWKS_URL`. Never place a secret or service-role key in a `NEXT_PUBLIC_` variable.
 3. Run `npm install`, then `npm run dev`. Open <http://localhost:3000>.
 4. Register an account, enter the eight-digit confirmation code from the email, and continue. The forgot-password flow also uses an eight-digit emailed code before allowing a new password. The app's code length matches this Supabase project's `mailer_otp_length` setting.
    In Supabase Authentication → URL Configuration, set the production Site URL to `https://kingdom-seekers-delight12.vercel.app` and allow both that URL and `http://localhost:3000` as redirect URLs.
-5. Project `ulbmhpohfzafosjzycor` already has its first admin. For a fresh project, appoint the first admin after confirming the account belongs to the intended owner. If it is the only confirmed account, run `npm run auth:bootstrap-admin` with a management token that can write to the database. Otherwise, find the intended account’s UUID in Supabase Authentication → Users, then run this in the Supabase SQL editor (replace the placeholder):
+5. Project `ulbmhpohfzafosjzycor` already has its first admin. The verified `support.kingdomseekers@gmail.com` account automatically receives admin access after email confirmation. Register and confirm that mailbox through the app; it does not have an account yet. The current admin remains to avoid lockout. For a fresh project, appoint the first admin after confirming the account belongs to the intended owner. If it is the only confirmed account, run `npm run auth:bootstrap-admin` with a management token that can write to the database. Otherwise, find the intended account’s UUID in Supabase Authentication → Users, then run this in the Supabase SQL editor (replace the placeholder):
 
    ```sql
    insert into public.staff_roles (user_id, role)
@@ -30,6 +32,8 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
    ```
 
    Later role changes can be made in **Staff studio → Members** by an admin. Do not enable public inserts into `staff_roles`.
+
+Members can request staff access from their profile. An admin reviews requests in **Staff studio ? Members**. Approval grants the requested role.
 
 No events are published by default. Staff should create confirmed gatherings in Staff studio before inviting members. The database project and hosting account are external services; this repository does not contain their credentials.
 
@@ -50,17 +54,19 @@ The eight HTML files in [`supabase/email-templates`](supabase/email-templates) c
 
 Social platform logos in [`public/social`](public/social) are rasterized from [Simple Icons v16](https://github.com/simple-icons/simple-icons). App pages load them locally; email templates load the PNGs from this public GitHub repository, while keeping platform names visible if an email client blocks images.
 
-Before inviting members, resolve Brevo's `525` unauthorized-IP SMTP response and test signup and recovery with an address you control. Disable click tracking for these transactional messages because link rewriting can interfere with Auth confirmation links. The Vercel production deployment currently has access protection, so an email link may reach a protected page until that setting is changed.
+Before inviting members, test signup and recovery with an address you control and inspect Brevo's delivery logs. Disable click tracking for transactional messages because link rewriting can interfere with Auth confirmation links.
 
 ## Vercel deployment
 
-This repository is linked to the Vercel project `delight12/kingdom-seekers`, with GitHub connected to `main`. The production alias is <https://kingdom-seekers-delight12.vercel.app>. The Vercel team's deployment protection currently requires a Vercel login to view it.
+This repository is linked to the Vercel project `delight12/kingdom-seekers`, with GitHub connected to `main`. The production alias is <https://kingdom-seekers-delight12.vercel.app>. Vercel Standard Protection keeps generated deployment URLs and previews private while allowing access to the production alias.
 
-The five Supabase variables above are configured in Vercel for Production, Preview, and Development. Pushing to `main` triggers a production deployment. The supplied `SUPABASE_SECRET_KEY` was masked, so it was not configured; this V1 app uses row-level-security-scoped member access and does not require that key. The authenticated `GET /api/me` route uses `@supabase/server` to verify a bearer JWT and return the caller's profile under row-level security.
+The five Supabase variables and three VAPID variables in `.env.example` are configured in Vercel for Production, Preview, and Development. Pushing to `main` triggers a production deployment. The supplied `SUPABASE_SECRET_KEY` was masked, so it was not configured; this V1 app uses row-level-security-scoped member access and does not require that key. The authenticated `GET /api/me` route uses `@supabase/server` to verify a bearer JWT and return the caller's profile under row-level security. The `POST /api/announcements` route requires an admin JWT, publishes an in-app announcement, and sends Web Push to opted-in devices. Keep `VAPID_PRIVATE_KEY` server-only and reuse the key pair; rotating it requires members to subscribe again.
+
+On Android, use a browser that supports Web Push and allow notifications when prompted. On iPhone, add the site to the Home Screen from Safari, open the installed app, and enable notifications there. The service worker and manifest are served from the production HTTPS domain. Push delivery needs a real subscribed device for an end-to-end test and depends on the browser push service.
 
 ## Checks
 
-Run `npm run typecheck`, `npm run lint`, `npm run build`, and `npm run test:db`. GitHub Actions runs these checks on pushes and pull requests. The database test uses an embedded PostgreSQL engine to check the migration, privacy rules, moderation visibility, journey order, prayer counts, mission participation, and event capacity. The live project has the V1 schema, but member sign-up and email delivery still need a controlled end-to-end check.
+Run `npm run typecheck`, `npm run lint`, `npm run build`, and `npm run test:db`. GitHub Actions runs these checks on pushes and pull requests. The database test uses an embedded PostgreSQL engine to check the migration, privacy rules, staff approvals, push-subscription access, moderation visibility, journey order, prayer counts, mission participation, and event capacity. Member sign-up, email delivery, and phone push still need controlled end-to-end checks on real addresses and devices.
 
 ## Privacy model
 

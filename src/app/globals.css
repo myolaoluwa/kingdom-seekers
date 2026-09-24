@@ -20,3 +20,9 @@
 .social-footer--dashboard{padding:24px clamp(24px,4vw,68px) 32px;border-top:1px solid var(--line);background:#fff}
 .social-footer--card{margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
 @media(max-width:780px){.social-footer--dashboard{padding:20px 18px 95px}.social-footer--auth{margin-top:2px}}
+.push-panel{margin-top:18px}
+.push-panel h3,.staff-access-panel h3,.staff-requests-panel h3{margin:7px 0 8px}
+.push-panel .button{margin-top:4px}
+.staff-access-panel{margin-top:18px;max-width:750px}
+.staff-requests-panel{margin-bottom:18px}
+.staff-requests-panel .review-row>div:last-child{display:flex;gap:7px}

@@ -5,7 +5,7 @@ const db = new PGlite();
 try {
   await db.exec(`create schema auth;
     create role authenticated;
-    create table auth.users (id uuid primary key, raw_user_meta_data jsonb not null default '{}'::jsonb);
+    create table auth.users (id uuid primary key, email text, email_confirmed_at timestamptz, raw_user_meta_data jsonb not null default '{}'::jsonb);
     create function auth.uid() returns uuid language sql stable as $$
       select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
     $$;
@@ -15,6 +15,8 @@ try {
   await db.exec(migration);
   const backfill = readFileSync(new URL('../supabase/migrations/202609240001_backfill_profiles.sql', import.meta.url), 'utf8');
   await db.exec(backfill);
+  const staffPush = readFileSync(new URL('../supabase/migrations/202609240002_staff_push.sql', import.meta.url), 'utf8');
+  await db.exec(staffPush);
   await db.exec(`grant usage on schema public, auth to authenticated;
     grant select, insert, update, delete on all tables in schema public to authenticated;
     grant execute on all functions in schema public to authenticated;
@@ -75,6 +77,35 @@ try {
   try { await db.query('insert into public.event_registrations(event_id,user_id) values ($1,$2)', [eventId, '00000000-0000-0000-0000-000000000003']); }
   catch { capacityBlocked = true; }
   if (!capacityBlocked) throw new Error('Event capacity was not enforced');
+
+  await db.exec(`reset role;
+    insert into auth.users(id,email) values ('00000000-0000-0000-0000-000000000005','support.kingdomseekers@gmail.com');`);
+  const unconfirmedAdmin = await db.query("select count(*)::int as count from public.staff_roles where user_id='00000000-0000-0000-0000-000000000005'");
+  if (unconfirmedAdmin.rows[0].count !== 0) throw new Error('Unverified support account gained admin');
+  await db.exec("update auth.users set email_confirmed_at=now() where id='00000000-0000-0000-0000-000000000005';");
+  const confirmedAdmin = await db.query("select count(*)::int as count from public.staff_roles where user_id='00000000-0000-0000-0000-000000000005' and role='admin'");
+  if (confirmedAdmin.rows[0].count !== 1) throw new Error('Verified support account was not granted admin');
+
+  await db.exec(`set request.jwt.claim.sub = '00000000-0000-0000-0000-000000000002'; set role authenticated;
+    insert into public.staff_access_requests(user_id,requested_role,reason)
+    values ('00000000-0000-0000-0000-000000000002','prayer_moderator','I can help review prayer requests.');
+    insert into public.push_subscriptions(user_id,endpoint,p256dh,auth)
+    values ('00000000-0000-0000-0000-000000000002','https://push.example.test/subscription/second','public-key','auth-secret');`);
+  const requestId = (await db.query('select id from public.staff_access_requests')).rows[0].id;
+  let selfApprovalBlocked = false;
+  try { await db.query('select public.review_staff_access_request($1,true)', [requestId]); }
+  catch { selfApprovalBlocked = true; }
+  if (!selfApprovalBlocked) throw new Error('Member approved their own staff request');
+  let subscriptionListBlocked = false;
+  try { await db.query('select * from public.admin_push_subscriptions()'); }
+  catch { subscriptionListBlocked = true; }
+  if (!subscriptionListBlocked) throw new Error('Member could enumerate push subscriptions');
+  await db.exec(`reset role; set request.jwt.claim.sub = '00000000-0000-0000-0000-000000000001'; set role authenticated;`);
+  await db.query('select public.review_staff_access_request($1,true)', [requestId]);
+  const approved = await db.query("select role from public.staff_roles where user_id='00000000-0000-0000-0000-000000000002' and role='prayer_moderator'");
+  if (approved.rows.length !== 1) throw new Error('Admin approval did not grant the requested role');
+  const subscriptions = await db.query('select * from public.admin_push_subscriptions()');
+  if (subscriptions.rows.length !== 1) throw new Error('Admin could not enumerate push subscriptions');
   console.log('Migration and core privacy checks passed.');
 } catch (error) {
   console.error(error.message);
