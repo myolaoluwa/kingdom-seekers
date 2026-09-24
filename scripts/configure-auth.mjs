@@ -26,6 +26,10 @@ if (!Number.isInteger(Number(config.BREVO_SMTP_PORT)) || Number(config.BREVO_SMT
   throw new Error('BREVO_SMTP_PORT must be a valid port number.');
 }
 if (!config.BREVO_FROM_EMAIL.includes('@')) throw new Error('BREVO_FROM_EMAIL must be an email address.');
+if (![15, 64].includes(config.BREVO_SMTP_KEY.length)) {
+  console.error('BREVO_SMTP_KEY must be the full Brevo SMTP key (15 or 64 characters), not an API key, password, or masked value.');
+  process.exit(1);
+}
 
 const payload = {
   site_url: config.SUPABASE_AUTH_SITE_URL,
