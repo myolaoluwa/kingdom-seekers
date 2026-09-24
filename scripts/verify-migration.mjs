@@ -8,9 +8,13 @@ try {
     create table auth.users (id uuid primary key, raw_user_meta_data jsonb not null default '{}'::jsonb);
     create function auth.uid() returns uuid language sql stable as $$
       select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
-    $$;`);
+    $$;
+    insert into auth.users(id,raw_user_meta_data) values
+      ('00000000-0000-0000-0000-000000000004','{"full_name":"Existing Member"}');`);
   const migration = readFileSync(new URL('../supabase/migrations/202609230001_v1.sql', import.meta.url), 'utf8').replace('create extension if not exists pgcrypto;', '');
   await db.exec(migration);
+  const backfill = readFileSync(new URL('../supabase/migrations/202609240001_backfill_profiles.sql', import.meta.url), 'utf8');
+  await db.exec(backfill);
   await db.exec(`grant usage on schema public, auth to authenticated;
     grant select, insert, update, delete on all tables in schema public to authenticated;
     grant execute on all functions in schema public to authenticated;
@@ -19,7 +23,9 @@ try {
       ('00000000-0000-0000-0000-000000000002','{"full_name":"Second Member"}'),
       ('00000000-0000-0000-0000-000000000003','{"full_name":"Third Member"}');`);
   const profiles = await db.query('select count(*)::int as count from public.profiles');
-  if (profiles.rows[0].count !== 3) throw new Error('Profile trigger failed');
+  if (profiles.rows[0].count !== 4) throw new Error('Profile trigger or backfill failed');
+  const existingProfile = await db.query("select full_name from public.profiles where id='00000000-0000-0000-0000-000000000004'");
+  if (existingProfile.rows[0]?.full_name !== 'Existing Member') throw new Error('Existing account was not backfilled');
 
   await db.exec(`set request.jwt.claim.sub = '00000000-0000-0000-0000-000000000001'; set role authenticated;`);
   await db.exec(`insert into public.journey_progress(user_id,day) values ('00000000-0000-0000-0000-000000000001',1);`);

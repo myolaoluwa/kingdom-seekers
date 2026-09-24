@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test:db": "node scripts/verify-migration.mjs",
     "auth:check": "node scripts/configure-auth.mjs --check",
-    "auth:configure": "node scripts/configure-auth.mjs"
+    "auth:configure": "node scripts/configure-auth.mjs",
+    "auth:bootstrap-admin": "node scripts/bootstrap-first-admin.mjs"
   },
   "dependencies": {
     "@supabase/server": "^1.8.0",

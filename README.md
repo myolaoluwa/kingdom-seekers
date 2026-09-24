@@ -16,12 +16,12 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 
 ## Run locally
 
-1. In the Supabase project SQL editor, run [`supabase/migrations/202609230001_v1.sql`](supabase/migrations/202609230001_v1.sql) once. It creates the V1 tables, access policies, triggers, starter missions, and welcome announcement. The live project currently does not have these tables.
+1. The V1 migrations have been applied to project `ulbmhpohfzafosjzycor`. For a fresh Supabase project, run [`supabase/migrations/202609230001_v1.sql`](supabase/migrations/202609230001_v1.sql) followed by [`supabase/migrations/202609240001_backfill_profiles.sql`](supabase/migrations/202609240001_backfill_profiles.sql) in its SQL editor. The second migration creates profiles for accounts registered before the profile trigger existed.
 2. The ignored `.env.local` is configured for project `ulbmhpohfzafosjzycor`. Copy [`.env.example`](.env.example) and use your own project values if you need a different Supabase project. The browser uses `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; server routes use `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_JWKS_URL`. Never place a secret or service-role key in a `NEXT_PUBLIC_` variable.
 3. Run `npm install`, then `npm run dev`. Open <http://localhost:3000>.
 4. Register an account. If email confirmation is enabled in Supabase Auth, confirm the email before signing in.
    In Supabase Authentication → URL Configuration, set the production Site URL to `https://kingdom-seekers-delight12.vercel.app` and allow both that URL and `http://localhost:3000` as redirect URLs. Password recovery links return to the same origin that requested them.
-5. To appoint the first admin, find that account’s UUID in Supabase Authentication → Users, then run this in the Supabase SQL editor (replace the placeholder):
+5. Project `ulbmhpohfzafosjzycor` already has its first admin. For a fresh project, appoint the first admin after confirming the account belongs to the intended owner. If it is the only confirmed account, run `npm run auth:bootstrap-admin` with a management token that can write to the database. Otherwise, find the intended account’s UUID in Supabase Authentication → Users, then run this in the Supabase SQL editor (replace the placeholder):
 
    ```sql
    insert into public.staff_roles (user_id, role)
@@ -41,7 +41,7 @@ Supabase Auth owns signup, email confirmation, sign-in, and password recovery. B
 3. Run `npm run auth:check` to validate the local fields, then `npm run auth:configure` to apply them to this Supabase project. The script enables email/password Auth with email confirmation, secure email changes, the production Site URL and allowed local redirect, and Brevo custom SMTP. It does not print credential values.
 4. In Brevo, authenticate the sending domain with its recommended DNS records, and check transactional email logs. Test signup confirmation and password recovery using an address you control. Supabase's default mail service is restricted and is not intended for production.
 
-You can also enter the same values manually in Supabase **Authentication → SMTP Settings** and **Authentication → URL Configuration** instead of using the script. The application already points to the supplied Supabase project; no Brevo API package is needed. [Supabase custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp), [Supabase redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls), and [Brevo SMTP settings](https://help.brevo.com/hc/en-us/articles/7924908994450-Send-transactional-emails-using-Brevo-SMTP) describe the provider-side settings.
+The Auth and SMTP settings have been applied to project `ulbmhpohfzafosjzycor`. A real confirmation and recovery email should be tested with an address you control before inviting members. You can also enter the same values manually in Supabase **Authentication → SMTP Settings** and **Authentication → URL Configuration** instead of using the script. The application already points to the supplied Supabase project; no Brevo API package is needed. [Supabase custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp), [Supabase redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls), and [Brevo SMTP settings](https://help.brevo.com/hc/en-us/articles/7924908994450-Send-transactional-emails-using-Brevo-SMTP) describe the provider-side settings.
 
 ## Vercel deployment
 
@@ -51,7 +51,7 @@ The five Supabase variables above are configured in Vercel for Production, Previ
 
 ## Checks
 
-Run `npm run typecheck`, `npm run lint`, `npm run build`, and `npm run test:db`. GitHub Actions runs these checks on pushes and pull requests. The database test uses an embedded PostgreSQL engine to check the migration, privacy rules, moderation visibility, journey order, prayer counts, mission participation, and event capacity. The SQL migration must still be applied to a Supabase project for live account and data flows; local checks do not verify those live flows.
+Run `npm run typecheck`, `npm run lint`, `npm run build`, and `npm run test:db`. GitHub Actions runs these checks on pushes and pull requests. The database test uses an embedded PostgreSQL engine to check the migration, privacy rules, moderation visibility, journey order, prayer counts, mission participation, and event capacity. The live project has the V1 schema, but member sign-up and email delivery still need a controlled end-to-end check.
 
 ## Privacy model
 
