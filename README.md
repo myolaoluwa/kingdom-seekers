@@ -4,7 +4,7 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 
 ## What V1 includes
 
-- Email registration and sign-in, password recovery, progressive onboarding, and private profile editing.
+- Email registration with password confirmation and code verification, sign-in, code-based password recovery, progressive onboarding, and private profile editing.
 - Kingdom Compass reflection with a suggested service pathway and related missions.
 - Seven-day Revival Journey with progress and a private journal.
 - Prayer Exchange with anonymous, first-name, and private requests; moderation; one “I prayed” response per person; and prayer counts.
@@ -19,8 +19,8 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 1. The V1 migrations have been applied to project `ulbmhpohfzafosjzycor`. For a fresh Supabase project, run [`supabase/migrations/202609230001_v1.sql`](supabase/migrations/202609230001_v1.sql) followed by [`supabase/migrations/202609240001_backfill_profiles.sql`](supabase/migrations/202609240001_backfill_profiles.sql) in its SQL editor. The second migration creates profiles for accounts registered before the profile trigger existed.
 2. The ignored `.env.local` is configured for project `ulbmhpohfzafosjzycor`. Copy [`.env.example`](.env.example) and use your own project values if you need a different Supabase project. The browser uses `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; server routes use `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_JWKS_URL`. Never place a secret or service-role key in a `NEXT_PUBLIC_` variable.
 3. Run `npm install`, then `npm run dev`. Open <http://localhost:3000>.
-4. Register an account. If email confirmation is enabled in Supabase Auth, confirm the email before signing in.
-   In Supabase Authentication → URL Configuration, set the production Site URL to `https://kingdom-seekers-delight12.vercel.app` and allow both that URL and `http://localhost:3000` as redirect URLs. Password recovery links return to the same origin that requested them.
+4. Register an account, enter the confirmation code from the email, and continue. The forgot-password flow also uses an emailed code before allowing a new password.
+   In Supabase Authentication → URL Configuration, set the production Site URL to `https://kingdom-seekers-delight12.vercel.app` and allow both that URL and `http://localhost:3000` as redirect URLs.
 5. Project `ulbmhpohfzafosjzycor` already has its first admin. For a fresh project, appoint the first admin after confirming the account belongs to the intended owner. If it is the only confirmed account, run `npm run auth:bootstrap-admin` with a management token that can write to the database. Otherwise, find the intended account’s UUID in Supabase Authentication → Users, then run this in the Supabase SQL editor (replace the placeholder):
 
    ```sql
@@ -45,7 +45,7 @@ The Auth and SMTP settings have been applied to project `ulbmhpohfzafosjzycor`. 
 
 ### Branded Auth emails
 
-The eight HTML files in [`supabase/email-templates`](supabase/email-templates) cover signup confirmation, password recovery, invitation, magic link, email change, reauthentication, password-change notice, and email-change notice. They use the app's colors and text-based branding, so they do not depend on a remotely hosted logo image. Edit the copy in [`scripts/email-templates.mjs`](scripts/email-templates.mjs), then run `npm run auth:templates:build` to regenerate the HTML. Run `npm run auth:templates:apply` to update the hosted Supabase Auth subjects and content, or `npm run auth:templates:verify` to compare the hosted settings with the local files. The apply command also enables password-change and email-change security notices. It does not send messages.
+The eight HTML files in [`supabase/email-templates`](supabase/email-templates) cover signup confirmation, password recovery, invitation, magic link, email change, reauthentication, password-change notice, and email-change notice. Signup and recovery now contain one-time codes entered in the app; invitation and email-change flows retain links because the V1 app does not offer code-entry screens for those actions. They use the app's colors and text-based branding, so they do not depend on a remotely hosted logo image. Edit the copy in [`scripts/email-templates.mjs`](scripts/email-templates.mjs), then run `npm run auth:templates:build` to regenerate the HTML. Run `npm run auth:templates:apply` to update the hosted Supabase Auth subjects and content, or `npm run auth:templates:verify` to compare the hosted settings with the local files. The apply command also enables password-change and email-change security notices. It does not send messages.
 
 Before inviting members, resolve Brevo's `525` unauthorized-IP SMTP response and test signup and recovery with an address you control. Disable click tracking for these transactional messages because link rewriting can interfere with Auth confirmation links. The Vercel production deployment currently has access protection, so an email link may reach a protected page until that setting is changed.
 

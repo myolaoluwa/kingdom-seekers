@@ -10,19 +10,19 @@ const siteURL = '{{ .SiteURL }}';
 const templates = [
   {
     name: 'confirmation', subjectKey: 'mailer_subjects_confirmation', contentKey: 'mailer_templates_confirmation_content',
-    subject: 'Confirm your email | Kingdom Seekers', eyebrow: 'WELCOME TO THE JOURNEY',
+    subject: 'Your confirmation code | Kingdom Seekers', eyebrow: 'WELCOME TO THE JOURNEY',
     title: 'Your journey starts here.',
-    body: 'Thank you for joining Kingdom Seekers. Confirm your email address to activate your account and begin your seven-day journey.',
-    action: 'Confirm my email', href: confirmationURL,
+    body: 'Thank you for joining Kingdom Seekers. Enter this code in the app to activate your account and begin your seven-day journey.',
+    code: '{{ .Token }}',
     note: 'If you did not create an account, you can ignore this email.',
   },
   {
     name: 'recovery', subjectKey: 'mailer_subjects_recovery', contentKey: 'mailer_templates_recovery_content',
-    subject: 'Reset your password | Kingdom Seekers', eyebrow: 'ACCOUNT ACCESS',
+    subject: 'Your password reset code | Kingdom Seekers', eyebrow: 'ACCOUNT ACCESS',
     title: 'A fresh start is one click away.',
-    body: 'We received a request to reset the password for your Kingdom Seekers account. Use the secure link below to choose a new password.',
-    action: 'Reset my password', href: confirmationURL,
-    note: 'If you did not request a password reset, ignore this email. Your password will stay the same.',
+    body: 'We received a request to reset the password for your Kingdom Seekers account. Enter this code in the app to choose a new password.',
+    code: '{{ .Token }}',
+    note: 'If you did not request a password reset, do not share this code. Your password will stay the same.',
   },
   {
     name: 'invite', subjectKey: 'mailer_subjects_invite', contentKey: 'mailer_templates_invite_content',
@@ -134,7 +134,7 @@ function localPayload() {
 const mode = process.argv[2];
 if (mode === '--build') {
   mkdirSync(directory, { recursive: true });
-  for (const template of templates) writeFileSync(join(directory, `${template.name}.html`), render(template));
+  for (const template of templates) writeFileSync(join(directory, `${template.name}.html`), render(template).replace(/[ \t]+$/gm, ''));
   console.log(`Built ${templates.length} branded Supabase email templates.`);
 } else if (mode === '--apply' || mode === '--verify') {
   if (!existsSync(envPath)) throw new Error('Missing .env.auth.local.');

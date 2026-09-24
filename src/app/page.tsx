@@ -169,31 +169,78 @@ function Heading({ eyebrow, title, lead }: { eyebrow: string; title: string; lea
 function Submit({ children, busy, className = '' }: { children: React.ReactNode; busy: boolean; className?: string }) { return <button disabled={busy} type="submit" className={`button ${className}`}>{children}<ArrowRight size={17} /></button>; }
 
 function Auth({ client, mode, setMode }: { client: SupabaseClient; mode: 'login' | 'signup'; setMode: (mode: 'login' | 'signup') => void }) {
-  const [email, setEmail] = useState(''); const [password, setPassword] = useState(''); const [name, setName] = useState(''); const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
-  const [forgot, setForgot] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [name, setName] = useState('');
+  const [code, setCode] = useState('');
+  const [stage, setStage] = useState<'form' | 'signup-code' | 'recovery-email' | 'recovery-code'>('form');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState('');
   async function requestReset(event: React.FormEvent) {
-    event.preventDefault(); setBusy(true); setError('');
-    const { error: resetError } = await client.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+    event.preventDefault(); setBusy(true); setError(''); setNotice('');
+    const { error: resetError } = await client.auth.resetPasswordForEmail(email.trim(), { redirectTo: window.location.origin });
     setBusy(false);
-    setError(resetError ? resetError.message : 'Check your email for a password reset link.');
+    if (resetError) setError(resetError.message);
+    else { setStage('recovery-code'); setNotice('If this address has an account, a verification code is on its way.'); }
   }
-  async function submit(event: React.FormEvent) { event.preventDefault(); setBusy(true); setError(''); const result = mode === 'signup' ? await client.auth.signUp({ email, password, options: { data: { full_name: name.trim() }, emailRedirectTo: window.location.origin } }) : await client.auth.signInWithPassword({ email, password }); setBusy(false); if (result.error) setError(result.error.message); else if (mode === 'signup' && !result.data.session) setError('Account created. Check your email to confirm your address, then sign in.'); }
-  if (forgot) return <div className="onboard-screen"><div className="onboard-card"><Image src="/logo.png" alt="Kingdom Seekers" width={100} height={80} /><span className="eyebrow">ACCOUNT RECOVERY</span><h1>Reset your password</h1><p>We’ll email a secure reset link if this address has an account.</p><form onSubmit={requestReset}><label>Email address<input required type="email" value={email} onChange={event => setEmail(event.target.value)} /></label>{error && <div className="form-message" role="status">{error}</div>}<Submit busy={busy}>Send reset link</Submit></form><button className="text-button" onClick={() => { setForgot(false); setError(''); }}>Back to sign in</button></div></div>;
-  return <div className="auth-screen"><div className="auth-story"><Image src="/logo.png" alt="Kingdom Seekers" width={160} height={100} /><div><span className="eyebrow">THE SEEKERS’ HUB</span><h1>Every journey begins with a step.</h1><p>Discover your path. Grow in faith. Pray for others. Serve with purpose.</p><div className="auth-cycle">DISCOVER <span>→</span> GROW <span>→</span> PRAY <span>→</span> SERVE</div></div></div><div className="auth-form-wrap"><div className="auth-form"><span className="eyebrow">WELCOME {mode === 'signup' ? 'TO THE JOURNEY' : 'BACK'}</span><h2>{mode === 'signup' ? 'Find your place here.' : 'Continue your journey.'}</h2><p>{mode === 'signup' ? 'Create an account to take your first step.' : 'Sign in to pick up where you left off.'}</p><form onSubmit={submit}>{mode === 'signup' && <label>Your name<input required minLength={2} value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" /></label>}<label>Email address<input required type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" /></label><label>Password<input required minLength={8} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="At least 8 characters" /></label>{error && <div className="form-message" role="status">{error}</div>}<Submit busy={busy}>{mode === 'signup' ? 'Create account' : 'Sign in'}</Submit></form>{mode === 'login' && <button className="text-button" onClick={() => { setForgot(true); setError(''); }}>Forgot password?</button>}<p className="auth-switch">{mode === 'signup' ? 'Already have an account?' : 'New to The Seekers’ Hub?'} <button onClick={() => { setError(''); setMode(mode === 'signup' ? 'login' : 'signup'); }}>{mode === 'signup' ? 'Sign in' : 'Create an account'}</button></p></div></div></div>;
+  async function submit(event: React.FormEvent) {
+    event.preventDefault(); setError(''); setNotice('');
+    if (mode === 'signup' && password !== confirmPassword) { setError('Passwords do not match.'); return; }
+    setBusy(true);
+    const result = mode === 'signup'
+      ? await client.auth.signUp({ email: email.trim(), password, options: { data: { full_name: name.trim() } } })
+      : await client.auth.signInWithPassword({ email: email.trim(), password });
+    setBusy(false);
+    if (result.error) setError(result.error.message);
+    else if (mode === 'signup' && !result.data.session) {
+      setPassword(''); setConfirmPassword(''); setCode(''); setStage('signup-code');
+      setNotice('We sent a confirmation code to your email address.');
+    }
+  }
+  async function verifyCode(event: React.FormEvent) {
+    event.preventDefault(); setBusy(true); setError('');
+    const result = await client.auth.verifyOtp({ email: email.trim(), token: code.trim(), type: stage === 'signup-code' ? 'signup' : 'recovery' });
+    setBusy(false);
+    if (result.error) setError(result.error.message);
+    else if (!result.data.session) setError('The code could not be verified. Request a new one.');
+  }
+  async function resendCode() {
+    setBusy(true); setError(''); setNotice('');
+    const result = stage === 'signup-code'
+      ? await client.auth.resend({ type: 'signup', email: email.trim() })
+      : await client.auth.resetPasswordForEmail(email.trim());
+    setBusy(false);
+    if (result.error) setError(result.error.message);
+    else setNotice('A new code has been requested. Check your email.');
+  }
+  if (stage !== 'form') {
+    const isSignup = stage === 'signup-code';
+    return <div className="onboard-screen"><div className="onboard-card"><Image src="/logo.png" alt="Kingdom Seekers" width={100} height={80} /><span className="eyebrow">{isSignup ? 'CONFIRM YOUR ACCOUNT' : 'ACCOUNT RECOVERY'}</span><h1>{stage === 'recovery-email' ? 'Reset your password' : 'Enter your email code'}</h1><p>{stage === 'recovery-email' ? 'We’ll email a code if this address has an account.' : email.trim() ? `Enter the code sent to ${email.trim()}.` : 'Enter your email address and the code we sent you.'}</p>
+      {stage === 'recovery-email' ? <form onSubmit={requestReset}><label>Email address<input required type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} /></label>{error && <div className="form-message" role="alert">{error}</div>}<Submit busy={busy}>Send reset code</Submit></form>
+        : <form onSubmit={verifyCode}><label>Email address<input required type="email" autoComplete="email" value={email} onChange={event => setEmail(event.target.value)} /></label><label>Verification code<input required inputMode="numeric" pattern="[0-9]{6}" maxLength={6} autoComplete="one-time-code" value={code} onChange={event => setCode(event.target.value.replace(/\D/g, '').slice(0, 6))} placeholder="6-digit code" /></label>{notice && <div className="form-message" role="status">{notice}</div>}{error && <div className="form-message" role="alert">{error}</div>}<Submit busy={busy}>Verify code</Submit></form>}
+      {stage !== 'recovery-email' && <button className="text-button" disabled={busy || !email.trim()} onClick={() => void resendCode()}>Send a new code</button>}
+      <button className="text-button" onClick={() => { setStage('form'); setCode(''); setError(''); setNotice(''); setMode('login'); }}>Back to sign in</button></div></div>;
+  }
+  return <div className="auth-screen"><div className="auth-story"><Image src="/logo.png" alt="Kingdom Seekers" width={160} height={100} /><div><span className="eyebrow">THE SEEKERS’ HUB</span><h1>Every journey begins with a step.</h1><p>Discover your path. Grow in faith. Pray for others. Serve with purpose.</p><div className="auth-cycle">DISCOVER <span>→</span> GROW <span>→</span> PRAY <span>→</span> SERVE</div></div></div><div className="auth-form-wrap"><div className="auth-form"><span className="eyebrow">WELCOME {mode === 'signup' ? 'TO THE JOURNEY' : 'BACK'}</span><h2>{mode === 'signup' ? 'Find your place here.' : 'Continue your journey.'}</h2><p>{mode === 'signup' ? 'Create an account to take your first step.' : 'Sign in to pick up where you left off.'}</p><form onSubmit={submit}>{mode === 'signup' && <label>Your name<input required minLength={2} value={name} onChange={e => setName(e.target.value)} placeholder="Your full name" /></label>}<label>Email address<input required type="email" autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" /></label><label>Password<input required minLength={8} type="password" autoComplete={mode === 'signup' ? 'new-password' : 'current-password'} value={password} onChange={e => setPassword(e.target.value)} placeholder="At least 8 characters" /></label>{mode === 'signup' && <label>Confirm password<input required minLength={8} type="password" autoComplete="new-password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Enter your password again" /></label>}{error && <div className="form-message" role="alert">{error}</div>}<Submit busy={busy}>{mode === 'signup' ? 'Create account' : 'Sign in'}</Submit></form>{mode === 'login' && <><button className="text-button" onClick={() => { setStage('recovery-email'); setError(''); }}>Forgot password?</button><button className="text-button" onClick={() => { setStage('signup-code'); setError(''); setCode(''); }}>Enter a confirmation code</button></>}<p className="auth-switch">{mode === 'signup' ? 'Already have an account?' : 'New to The Seekers’ Hub?'} <button onClick={() => { setError(''); setMode(mode === 'signup' ? 'login' : 'signup'); }}>{mode === 'signup' ? 'Sign in' : 'Create an account'}</button></p></div></div></div>;
 }
 
 function PasswordRecovery({ client, done }: { client: SupabaseClient; done: () => void }) {
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   async function submit(event: React.FormEvent) {
-    event.preventDefault(); setBusy(true); setError('');
+    event.preventDefault(); setError('');
+    if (password !== confirmPassword) { setError('Passwords do not match.'); return; }
+    setBusy(true);
     const result = await client.auth.updateUser({ password });
     setBusy(false);
     if (result.error) setError(result.error.message);
     else done();
   }
-  return <div className="onboard-screen"><div className="onboard-card"><Image src="/logo.png" alt="Kingdom Seekers" width={100} height={80} /><span className="eyebrow">ACCOUNT RECOVERY</span><h1>Choose a new password</h1><form onSubmit={submit}><label>New password<input required minLength={8} type="password" autoComplete="new-password" value={password} onChange={event => setPassword(event.target.value)} /></label>{error && <div className="form-message" role="status">{error}</div>}<Submit busy={busy}>Save password</Submit></form></div></div>;
+  return <div className="onboard-screen"><div className="onboard-card"><Image src="/logo.png" alt="Kingdom Seekers" width={100} height={80} /><span className="eyebrow">ACCOUNT RECOVERY</span><h1>Choose a new password</h1><form onSubmit={submit}><label>New password<input required minLength={8} type="password" autoComplete="new-password" value={password} onChange={event => setPassword(event.target.value)} /></label><label>Confirm new password<input required minLength={8} type="password" autoComplete="new-password" value={confirmPassword} onChange={event => setConfirmPassword(event.target.value)} /></label>{error && <div className="form-message" role="alert">{error}</div>}<Submit busy={busy}>Save password</Submit></form></div></div>;
 }
 
 function Onboarding({ client, userId, profile, refresh }: { client: SupabaseClient; userId: string; profile: Profile | null; refresh: () => Promise<void> }) {
