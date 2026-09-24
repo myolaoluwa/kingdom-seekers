@@ -51,7 +51,7 @@ export default function App() {
   const [message, setMessage] = useState('');
   const [dataError, setDataError] = useState('');
   const [busy, setBusy] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [passwordRecovery, setPasswordRecovery] = useState(false);
 
   const load = useCallback(async (client: SupabaseClient, userId: string) => {
