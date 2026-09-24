@@ -9,7 +9,8 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 - Seven-day Revival Journey with progress and a private journal.
 - Prayer Exchange with anonymous, first-name, and private requests; moderation; one “I prayed” response per person; and prayer counts.
 - Missions with acceptance, completion, and optional reflection.
-- Encouragement and testimony posts with pre-publication review and content reporting.
+- Live community conversation with immediate posting, long messages, replies, reactions, prayer and testimony labels, Bible references, shared images/files, voice notes, message history, and reporting for moderator follow-up.
+- Member photos in the Community and profile; private profile details remain restricted.
 - Event listing, capacity-aware individual/group registration, and confirmation.
 - Personalized home dashboard with the next step, progress, an event, and announcements.
 - Kingdom Seekers social links in account screens, the app footer, and every Auth email.
@@ -19,7 +20,7 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 
 ## Run locally
 
-1. The V1 migrations have been applied to project `ulbmhpohfzafosjzycor`. For a fresh Supabase project, run [`supabase/migrations/202609230001_v1.sql`](supabase/migrations/202609230001_v1.sql), [`supabase/migrations/202609240001_backfill_profiles.sql`](supabase/migrations/202609240001_backfill_profiles.sql), and [`supabase/migrations/202609240002_staff_push.sql`](supabase/migrations/202609240002_staff_push.sql) in order in its SQL editor.
+1. The V1 migrations have been applied to project `ulbmhpohfzafosjzycor`. For a fresh Supabase project, run [`supabase/migrations/202609230001_v1.sql`](supabase/migrations/202609230001_v1.sql), [`supabase/migrations/202609240001_backfill_profiles.sql`](supabase/migrations/202609240001_backfill_profiles.sql), [`supabase/migrations/202609240002_staff_push.sql`](supabase/migrations/202609240002_staff_push.sql), and [`supabase/migrations/202609240003_community_chat.sql`](supabase/migrations/202609240003_community_chat.sql) in order in its SQL editor.
 2. The ignored `.env.local` is configured for project `ulbmhpohfzafosjzycor`. Copy [`.env.example`](.env.example) and use your own project values if you need a different Supabase project. The browser uses `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; server routes use `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_JWKS_URL`. Never place a secret or service-role key in a `NEXT_PUBLIC_` variable.
 3. Run `npm install`, then `npm run dev`. Open <http://localhost:3000>.
 4. Register an account, enter the eight-digit confirmation code from the email, and continue. The forgot-password flow also uses an eight-digit emailed code before allowing a new password. The app's code length matches this Supabase project's `mailer_otp_length` setting.
@@ -33,9 +34,15 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 
    Later role changes can be made in **Staff studio → Members** by an admin. Do not enable public inserts into `staff_roles`.
 
-Members can request staff access from their profile. An admin reviews requests in **Staff studio ? Members**. Approval grants the requested role.
+Members can request staff access from their profile. An admin reviews requests in **Staff studio → Members**. Approval grants the requested role.
 
 No events are published by default. Staff should create confirmed gatherings in Staff studio before inviting members. The database project and hosting account are external services; this repository does not contain their credentials.
+
+## Community conversation
+
+Signed-in members can send messages immediately. New members can read older messages with **Load earlier messages**. A message may contain up to 20,000 characters, one attachment up to 10 MB, a Bible reference, and a reply to an earlier message. The composer supports microphone recording where the browser grants microphone access. Accepted attachments are JPG/PNG/WebP images, PDF, text or Word documents, and common audio formats. Supabase Realtime updates the conversation and reactions. If a connection drops, opening the Community again reloads recent history.
+
+Profile photos are limited to JPG/PNG/WebP files under 2 MB. Display names and avatars are visible to signed-in members in the Community; other profile fields remain private. Avatar images use the public `community-avatars` bucket. Shared files and voice notes use the private `community-media` bucket and short-lived signed URLs for signed-in members. A member can report a message; community moderators and admins can remove it from view in Staff studio. Routine messages do not await approval.
 
 ## Supabase Auth email through Brevo
 
@@ -70,4 +77,4 @@ Run `npm run typecheck`, `npm run lint`, `npm run build`, and `npm run test:db`.
 
 ## Privacy model
 
-Supabase Row Level Security controls all member data. Journal and Compass results belong to their owner. Private prayer requests are visible only to the requester and authorized prayer moderators/admins. Public prayer and community content is held for moderation before release. User roles live in a separate table; ordinary members cannot grant themselves staff permissions. Event capacity is enforced in the database.
+Supabase Row Level Security controls member data. Journal and Compass results belong to their owner. Private prayer requests are visible only to the requester and authorized prayer moderators/admins. Public prayer requests are held for moderation before release. Community messages appear immediately to signed-in members and can be reported and removed afterward. User roles live in a separate table; ordinary members cannot grant themselves staff permissions. Event capacity is enforced in the database.

@@ -4,7 +4,14 @@ import { PGlite } from '@electric-sql/pglite';
 const db = new PGlite();
 try {
   await db.exec(`create schema auth;
+    create schema storage;
     create role authenticated;
+    create table storage.buckets(id text primary key, name text, public boolean, file_size_limit bigint, allowed_mime_types text[]);
+    create table storage.objects(name text, bucket_id text, owner_id text);
+    create function storage.foldername(path text) returns text[] language sql immutable as $$
+      select string_to_array(path, '/')
+    $$;
+    create publication supabase_realtime;
     create table auth.users (id uuid primary key, email text, email_confirmed_at timestamptz, raw_user_meta_data jsonb not null default '{}'::jsonb);
     create function auth.uid() returns uuid language sql stable as $$
       select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
@@ -17,6 +24,8 @@ try {
   await db.exec(backfill);
   const staffPush = readFileSync(new URL('../supabase/migrations/202609240002_staff_push.sql', import.meta.url), 'utf8');
   await db.exec(staffPush);
+  const communityChat = readFileSync(new URL('../supabase/migrations/202609240003_community_chat.sql', import.meta.url), 'utf8');
+  await db.exec(communityChat);
   await db.exec(`grant usage on schema public, auth to authenticated;
     grant select, insert, update, delete on all tables in schema public to authenticated;
     grant execute on all functions in schema public to authenticated;
@@ -57,7 +66,25 @@ try {
   await db.exec(`insert into public.community_posts(user_id,kind,body) values ('00000000-0000-0000-0000-000000000002','encouragement','A little encouragement for our community today.');`);
   await db.exec(`reset role; set request.jwt.claim.sub = '00000000-0000-0000-0000-000000000003'; set role authenticated;`);
   const otherPosts = await db.query('select count(*)::int as count from public.community_posts');
-  if (otherPosts.rows[0].count !== 0) throw new Error('Unapproved post leaked');
+  if (otherPosts.rows[0].count !== 1) throw new Error('Community message history was not visible');
+  const card = await db.query("select display_name from public.community_member_cards where id='00000000-0000-0000-0000-000000000002'");
+  if (card.rows[0]?.display_name !== 'Second Member') throw new Error('Public chat card was not visible');
+  const messageId = (await db.query('select id from public.community_posts')).rows[0].id;
+  await db.query('insert into public.community_reactions(message_id,user_id,emoji) values ($1,$2,$3)',
+    [messageId, '00000000-0000-0000-0000-000000000003', '🙏']);
+  let spoofBlocked = false;
+  try { await db.query('insert into public.community_posts(user_id,kind,body) values ($1,$2,$3)',
+    ['00000000-0000-0000-0000-000000000002', 'message', 'Spoofed message']); }
+  catch { spoofBlocked = true; }
+  if (!spoofBlocked) throw new Error('Member could impersonate another chat author');
+  let foreignAvatarBlocked = false;
+  try { await db.exec("update public.profiles set avatar_path='00000000-0000-0000-0000-000000000002/photo.jpg' where id='00000000-0000-0000-0000-000000000003'"); }
+  catch { foreignAvatarBlocked = true; }
+  if (!foreignAvatarBlocked) throw new Error('Member could claim another avatar path');
+  await db.query('insert into public.community_posts(user_id,kind,body,reply_to,bible_reference) values ($1,$2,$3,$4,$5)',
+    ['00000000-0000-0000-0000-000000000003', 'prayer', 'Please pray with me.', messageId, 'Philippians 4:6']);
+  const replies = await db.query('select count(*)::int as count from public.community_posts where reply_to=$1', [messageId]);
+  if (replies.rows[0].count !== 1) throw new Error('Members could not reply to a visible message');
   await db.exec(`insert into public.mission_participation(mission_id,user_id)
     select id, '00000000-0000-0000-0000-000000000003' from public.missions limit 1;`);
   const myMission = await db.query('select mission_id from public.mission_participation');
