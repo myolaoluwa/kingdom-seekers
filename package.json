@@ -11,6 +11,9 @@
     "test:db": "node scripts/verify-migration.mjs",
     "auth:check": "node scripts/configure-auth.mjs --check",
     "auth:configure": "node scripts/configure-auth.mjs",
+    "auth:templates:build": "node scripts/email-templates.mjs --build",
+    "auth:templates:apply": "node scripts/email-templates.mjs --apply",
+    "auth:templates:verify": "node scripts/email-templates.mjs --verify",
     "auth:bootstrap-admin": "node scripts/bootstrap-first-admin.mjs"
   },
   "dependencies": {

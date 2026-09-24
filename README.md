@@ -43,6 +43,12 @@ Supabase Auth owns signup, email confirmation, sign-in, and password recovery. B
 
 The Auth and SMTP settings have been applied to project `ulbmhpohfzafosjzycor`. A real confirmation and recovery email should be tested with an address you control before inviting members. You can also enter the same values manually in Supabase **Authentication → SMTP Settings** and **Authentication → URL Configuration** instead of using the script. The application already points to the supplied Supabase project; no Brevo API package is needed. [Supabase custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp), [Supabase redirect URLs](https://supabase.com/docs/guides/auth/redirect-urls), and [Brevo SMTP settings](https://help.brevo.com/hc/en-us/articles/7924908994450-Send-transactional-emails-using-Brevo-SMTP) describe the provider-side settings.
 
+### Branded Auth emails
+
+The eight HTML files in [`supabase/email-templates`](supabase/email-templates) cover signup confirmation, password recovery, invitation, magic link, email change, reauthentication, password-change notice, and email-change notice. They use the app's colors and text-based branding, so they do not depend on a remotely hosted logo image. Edit the copy in [`scripts/email-templates.mjs`](scripts/email-templates.mjs), then run `npm run auth:templates:build` to regenerate the HTML. Run `npm run auth:templates:apply` to update the hosted Supabase Auth subjects and content, or `npm run auth:templates:verify` to compare the hosted settings with the local files. The apply command also enables password-change and email-change security notices. It does not send messages.
+
+Before inviting members, resolve Brevo's `525` unauthorized-IP SMTP response and test signup and recovery with an address you control. Disable click tracking for these transactional messages because link rewriting can interfere with Auth confirmation links. The Vercel production deployment currently has access protection, so an email link may reach a protected page until that setting is changed.
+
 ## Vercel deployment
 
 This repository is linked to the Vercel project `delight12/kingdom-seekers`, with GitHub connected to `main`. The production alias is <https://kingdom-seekers-delight12.vercel.app>. The Vercel team's deployment protection currently requires a Vercel login to view it.
