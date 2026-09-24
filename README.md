@@ -11,16 +11,16 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 - Missions with acceptance, completion, and optional reflection.
 - Live community conversation with immediate posting, long messages, replies, reactions, prayer and testimony labels, Bible references, shared images/files, voice notes, message history, and reporting for moderator follow-up.
 - Member photos in the Community and profile; private profile details remain restricted.
-- Event listing, capacity-aware individual/group registration, and confirmation.
+- Event calendar, admin/staff event publishing with images and an attachment, capacity-aware individual/group registration, and calendar-file download.
 - Personalized home dashboard with the next step, progress, an event, and announcements.
 - Kingdom Seekers social links in account screens, the app footer, and every Auth email.
 - Role-aware staff studio for prayer and community moderation, reports, missions, events, announcements, and admin role assignment.
 - Verified support-mailbox admin access, member requests for staff roles, and admin approval in Staff studio.
-- Optional phone notifications for community announcements through Web Push. Members enable notifications on each device.
+- Optional phone notifications for announcements and newly published events through Web Push. Members enable notifications on each device.
 
 ## Run locally
 
-1. The V1 migrations have been applied to project `ulbmhpohfzafosjzycor`. For a fresh Supabase project, run [`supabase/migrations/202609230001_v1.sql`](supabase/migrations/202609230001_v1.sql), [`supabase/migrations/202609240001_backfill_profiles.sql`](supabase/migrations/202609240001_backfill_profiles.sql), [`supabase/migrations/202609240002_staff_push.sql`](supabase/migrations/202609240002_staff_push.sql), and [`supabase/migrations/202609240003_community_chat.sql`](supabase/migrations/202609240003_community_chat.sql) in order in its SQL editor.
+1. The V1 migrations have been applied to project `ulbmhpohfzafosjzycor`. For a fresh Supabase project, run [`supabase/migrations/202609230001_v1.sql`](supabase/migrations/202609230001_v1.sql), [`supabase/migrations/202609240001_backfill_profiles.sql`](supabase/migrations/202609240001_backfill_profiles.sql), [`supabase/migrations/202609240002_staff_push.sql`](supabase/migrations/202609240002_staff_push.sql), [`supabase/migrations/202609240003_community_chat.sql`](supabase/migrations/202609240003_community_chat.sql), and [`supabase/migrations/202609240004_event_media_push.sql`](supabase/migrations/202609240004_event_media_push.sql) in order in its SQL editor.
 2. The ignored `.env.local` is configured for project `ulbmhpohfzafosjzycor`. Copy [`.env.example`](.env.example) and use your own project values if you need a different Supabase project. The browser uses `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`; server routes use `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, and `SUPABASE_JWKS_URL`. Never place a secret or service-role key in a `NEXT_PUBLIC_` variable.
 3. Run `npm install`, then `npm run dev`. Open <http://localhost:3000>.
 4. Register an account, enter the eight-digit confirmation code from the email, and continue. The forgot-password flow also uses an eight-digit emailed code before allowing a new password. The app's code length matches this Supabase project's `mailer_otp_length` setting.
@@ -37,6 +37,8 @@ A mobile-first Kingdom Seekers app built around **Discover → Grow → Pray →
 Members can request staff access from their profile. An admin reviews requests in **Staff studio → Members**. Approval grants the requested role.
 
 No events are published by default. Staff should create confirmed gatherings in Staff studio before inviting members. The database project and hosting account are external services; this repository does not contain their credentials.
+
+Admin, events admin, and leader roles can publish an upcoming event in **Staff studio → Content**. The form accepts a future date/time, five JPG/PNG/WebP images, and one PDF, text, or Word attachment (10 MB per file). The private `event-media` bucket serves signed-in members through short-lived URLs. The publish function atomically creates the event and an in-app announcement for every member. The server then immediately sends Web Push to subscribed devices and reports accepted deliveries. A member who has not enabled phone notifications still sees the event and announcement in the app; a web app cannot force the phone to accept push without the member's permission. Event links in push open the Events page. Members can browse the calendar and download an `.ics` invitation.
 
 ## Community conversation
 
@@ -67,7 +69,7 @@ Before inviting members, test signup and recovery with an address you control an
 
 This repository is linked to the Vercel project `delight12/kingdom-seekers`, with GitHub connected to `main`. The production alias is <https://kingdom-seekers-delight12.vercel.app>. Vercel Authentication protects preview deployments; production domains and production deployment URLs are public.
 
-The five Supabase variables and three VAPID variables in `.env.example` are configured in Vercel for Production, Preview, and Development. Pushing to `main` triggers a production deployment. The supplied `SUPABASE_SECRET_KEY` was masked, so it was not configured; this V1 app uses row-level-security-scoped member access and does not require that key. The authenticated `GET /api/me` route uses `@supabase/server` to verify a bearer JWT and return the caller's profile under row-level security. The `POST /api/announcements` route requires an admin JWT, publishes an in-app announcement, and sends Web Push to opted-in devices. Keep `VAPID_PRIVATE_KEY` server-only and reuse the key pair; rotating it requires members to subscribe again.
+The five Supabase variables and three VAPID variables in `.env.example` are configured in Vercel for Production, Preview, and Development. Pushing to `main` triggers a production deployment. The supplied `SUPABASE_SECRET_KEY` was masked, so it was not configured; this V1 app uses row-level-security-scoped member access and does not require that key. The authenticated `GET /api/me` route uses `@supabase/server` to verify a bearer JWT and return the caller's profile under row-level security. The `POST /api/announcements` and `POST /api/events` routes require suitable staff roles and send Web Push to opted-in devices. Keep `VAPID_PRIVATE_KEY` server-only and reuse the key pair; rotating it requires members to subscribe again.
 
 On Android, use a browser that supports Web Push and allow notifications when prompted. On iPhone, add the site to the Home Screen from Safari, open the installed app, and enable notifications there. The service worker and manifest are served from the production HTTPS domain. Push delivery needs a real subscribed device for an end-to-end test and depends on the browser push service.
 

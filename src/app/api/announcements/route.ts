@@ -1,10 +1,8 @@
 import { withSupabase } from '@supabase/server';
-import webPush from 'web-push';
+import { deliverPush, pushIsConfigured, type PushRow } from '@/lib/web-push';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
-
-type PushRow = { id: string; endpoint: string; p256dh: string; auth: string };
 
 export const POST = withSupabase({ auth: 'user' }, async (request, context) => {
   const { data: role, error: roleError } = await context.supabase.from('staff_roles')
@@ -18,10 +16,7 @@ export const POST = withSupabase({ auth: 'user' }, async (request, context) => {
   if (!title || title.length > 120 || !body || body.length > 600) {
     return Response.json({ error: 'Use a title under 120 characters and a message under 600 characters.' }, { status: 400 });
   }
-  const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-  const privateKey = process.env.VAPID_PRIVATE_KEY;
-  const subject = process.env.VAPID_SUBJECT;
-  if (!publicKey || !privateKey || !subject) {
+  if (!pushIsConfigured()) {
     return Response.json({ error: 'Push delivery is not configured.' }, { status: 503 });
   }
 
@@ -31,28 +26,9 @@ export const POST = withSupabase({ auth: 'user' }, async (request, context) => {
     .insert({ title, body }).select('id').single();
   if (noticeError) return Response.json({ error: 'Could not publish announcement.' }, { status: 500 });
 
-  webPush.setVapidDetails(subject, publicKey, privateKey);
-  let delivered = 0;
-  const send = async (subscription: PushRow) => {
-    try {
-      await webPush.sendNotification(
-        { endpoint: subscription.endpoint, keys: { p256dh: subscription.p256dh, auth: subscription.auth } },
-        JSON.stringify({ title, body, url: '/' }),
-        { TTL: 3600 },
-      );
-      return true;
-    } catch (error) {
-      const status = (error as { statusCode?: number }).statusCode;
-      if (status === 404 || status === 410) {
-        await context.supabase.rpc('remove_stale_push_subscription', { subscription_id: subscription.id });
-      }
-      return false;
-    }
-  };
   const rows = subscribers as PushRow[];
-  for (let index = 0; index < rows.length; index += 20) {
-    const batch = await Promise.all(rows.slice(index, index + 20).map(send));
-    delivered += batch.filter(Boolean).length;
-  }
+  const delivered = await deliverPush(rows, { title, body, url: '/' }, async subscription_id => {
+    await context.supabase.rpc('remove_stale_push_subscription', { subscription_id });
+  });
   return Response.json({ id: notice.id, subscribers: rows.length, delivered });
 });

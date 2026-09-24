@@ -26,6 +26,8 @@ try {
   await db.exec(staffPush);
   const communityChat = readFileSync(new URL('../supabase/migrations/202609240003_community_chat.sql', import.meta.url), 'utf8');
   await db.exec(communityChat);
+  const eventMedia = readFileSync(new URL('../supabase/migrations/202609240004_event_media_push.sql', import.meta.url), 'utf8');
+  await db.exec(eventMedia);
   await db.exec(`grant usage on schema public, auth to authenticated;
     grant select, insert, update, delete on all tables in schema public to authenticated;
     grant execute on all functions in schema public to authenticated;
@@ -104,6 +106,24 @@ try {
   try { await db.query('insert into public.event_registrations(event_id,user_id) values ($1,$2)', [eventId, '00000000-0000-0000-0000-000000000003']); }
   catch { capacityBlocked = true; }
   if (!capacityBlocked) throw new Error('Event capacity was not enforced');
+
+  let eventPublishBlocked = false;
+  try { await db.exec(`select public.create_upcoming_event('00000000-0000-0000-0000-000000000091',
+    'Unauthorized event','Details',now() + interval '1 day','Hall','Lagos',50,'{}',null,null);`); }
+  catch { eventPublishBlocked = true; }
+  if (!eventPublishBlocked) throw new Error('Ordinary member could publish an event');
+  await db.exec(`reset role; set request.jwt.claim.sub = '00000000-0000-0000-0000-000000000001'; set role authenticated;
+    select public.create_upcoming_event('00000000-0000-0000-0000-000000000092',
+      'Community gathering','Gather with us',now() + interval '2 days','Main Hall','Lagos',50,'{}',null,null);`);
+  const eventNotice = await db.query("select count(*)::int as count from public.notifications where title='New event: Community gathering'");
+  if (eventNotice.rows[0].count !== 1) throw new Error('Publishing an event did not create a community notice');
+  await db.exec("select * from public.event_push_subscriptions('00000000-0000-0000-0000-000000000092');");
+  let foreignEventMediaBlocked = false;
+  try { await db.exec(`select public.create_upcoming_event('00000000-0000-0000-0000-000000000093',
+    'Media spoof','Details',now() + interval '2 days','Hall','Lagos',50,
+    array['00000000-0000-0000-0000-000000000003/00000000-0000-0000-0000-000000000093/photo.jpg'],null,null);`); }
+  catch { foreignEventMediaBlocked = true; }
+  if (!foreignEventMediaBlocked) throw new Error('Event could claim another member media');
 
   await db.exec(`reset role;
     insert into auth.users(id,email) values ('00000000-0000-0000-0000-000000000005','support.kingdomseekers@gmail.com');`);
